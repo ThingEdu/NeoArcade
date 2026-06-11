@@ -1,0 +1,14 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Brainstorm companion + ảnh render tạm
+.superpowers/
+prototype/*.png
+prototype/fd_*.png
+prototype/shot_*.png
+prototype/cricket_*.png
+
+# macOS
+.DS_Store
