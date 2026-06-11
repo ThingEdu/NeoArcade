@@ -190,6 +190,7 @@ class World:
         self.rot = 0.0
         self.scroll = 0.0
         self.stun = 0.0
+        self.invuln = 0.0
         self.dead = False
         self.finished = False
 
@@ -228,29 +229,32 @@ class World:
         self.particles = [p for p in self.particles if p.life > 0]
         if self.finished or self.dead:
             return
-        moving = self.stun <= 0
-        if self.stun > 0:
+        if self.invuln > 0:
+            self.invuln -= dt
+        if self.stun > 0:                 # choáng: đóng băng + bất tử, không rơi/va chạm
             self.stun -= dt
-        self.scroll = (self.scroll + (self.speed * dt if moving else 0)) % 48
+            self.v = 0
+            self.rot = 0
+            return
+        self.scroll = (self.scroll + self.speed * dt) % 48
         self.v += GRAVITY * dt
         self.y += self.v * dt
         self.rot = max(-22, min(70, self.v * 0.07))
 
         if not self.pipes or self.pipes[-1][0] < self.vw - PIPE_SPACING:
             self._spawn()
-        if moving:
-            for pipe in self.pipes:
-                pipe[0] -= self.speed * dt
-                if not pipe[2] and pipe[0] + PIPE_W < self.bird_x:
-                    pipe[2] = True
-                    self.score += 1
-                    for _ in range(10):
-                        self.particles.append(Particle(self.bird_x, self.y, GREEN_LIME))
-                    if self.target and self.score >= self.target:
-                        self.finished = True
+        for pipe in self.pipes:
+            pipe[0] -= self.speed * dt
+            if not pipe[2] and pipe[0] + PIPE_W < self.bird_x:
+                pipe[2] = True
+                self.score += 1
+                for _ in range(10):
+                    self.particles.append(Particle(self.bird_x, self.y, GREEN_LIME))
+                if self.target and self.score >= self.target:
+                    self.finished = True
         self.pipes = [p for p in self.pipes if p[0] > -PIPE_W]
 
-        if self._hit():
+        if self.invuln <= 0 and self._hit():
             self._on_hit()
 
     def _hit(self):
@@ -268,6 +272,7 @@ class World:
             self.particles.append(Particle(self.bird_x, self.y, random.choice([ORANGE_HOT, PINK_HOT, GREEN_LIME])))
         if self.target is not None:      # đấu: choáng rồi chơi tiếp
             self.stun = STUN_TIME
+            self.invuln = STUN_TIME + 0.5  # bất tử thêm 0.5s sau khi tỉnh để thoát cột
             self.v = 0
             self.y = self.vh / 2
             for p in self.pipes:          # lùi nhẹ → mất thời gian
