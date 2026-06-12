@@ -1,0 +1,39 @@
+"""Hằng số game + bảng màu Dế Foundation. THUẦN — không import pygame."""
+
+# ---- Khung hình ----
+W, H = 900, 600
+FPS = 60
+
+# ---- Vật lý / luật chơi ----
+GRAVITY = 1500.0
+FLAP_V = -420.0
+BIRD_R = 16
+PIPE_W = 84
+PIPE_SPACING = 270
+GROUND_H = 80
+BASE_SPEED = 220.0
+SPEED_PER_POINT = 6.0
+
+DUEL_TARGET = 18          # số cột để về đích (đấu 2 người)
+DUEL_GAP = 195            # khe cố định khi đấu (công bằng)
+SOLO_GAP0 = 205           # khe ban đầu solo (hẹp dần)
+SOLO_GAP_MIN = 140
+STUN_TIME = 1.2          # choáng khi va chạm (đấu)
+INVULN_EXTRA = 0.5       # bất tử thêm sau khi tỉnh
+HIT_PUSHBACK = 70        # lùi cột khi va chạm (đấu)
+COUNTDOWN = 3.0
+
+# ---- Bảng màu Dế Foundation (DE STEM) ----
+BLUE_ELECTRIC = (35, 71, 251)    # #2347FB
+BLUE_WING = (104, 134, 252)
+BLUE_CYAN = (148, 246, 255)      # #94F6FF
+BLUE_SOFT = (216, 239, 255)      # #D8EFFF
+PINK_HOT = (215, 29, 144)        # #D71D90
+ORANGE_HOT = (231, 77, 30)       # #E74D1E
+ORANGE_WARM = (240, 112, 32)     # #F07020
+GREEN_CRICKET = (12, 112, 105)   # #0C7069
+GREEN_DEEP = (9, 84, 78)
+GREEN_LIME = (213, 242, 68)      # #D5F244
+GREEN_SOFT = (241, 255, 211)     # #F1FFD3
+INK = (18, 18, 18)
+WHITE = (247, 247, 247)

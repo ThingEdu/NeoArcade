@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neoarcade"
+version = "0.1.0"
+description = "Bộ game arcade vận động ThingBot trên NEO (ThingEdu). Game #1: FlappyDe."
+requires-python = ">=3.11"
+dependencies = ["pygame-ce>=2.5"]
+
+[project.optional-dependencies]
+hardware = ["neo-hw"]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[project.scripts]
+flappyde = "neoarcade.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+neoarcade = ["assets/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

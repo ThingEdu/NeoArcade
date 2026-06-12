@@ -107,8 +107,9 @@ Nước Rút đập nút…). Mỗi game đóng gói vào catalog NeoArcade / Ne
 
 ## 9. Lộ trình
 1. ✅ Prototype: con Dế brand, SOLO + ĐẤU 2 NGƯỜI, profile bàn phím.
-2. 🔜 Tách `engine/input/ui/storage` + TDD; leaderboard SQLite; âm thanh + attract loop.
-3. 🔜 Profile `thingbot` (neo-hw) + acceptance trên NEO One thật + 2 ThingBot.
+2. ✅ **Hoàn thiện**: tách `engine/input/ui/storage` (`src/neoarcade/`), **25 test** (engine/storage/input/controller),
+   leaderboard SQLite (TOP hôm nay ở menu), âm thanh chip-tune tổng hợp, mô hình **2 nút** khớp ThingBot.
+3. 🔜 Profile `thingbot` (neo-hw) chạy phần cứng thật + acceptance trên NEO One + 2 ThingBot.
 4. 🔜 Asset chính thức từ Figma brand kit (logo, mascot, shape).
 5. 🧪 Profile `jumppad` (nút cảm ứng — nhảy để bay) cho hướng vận động/dạy-làm.
 6. 🔜 Đưa FlappyDe vào catalog NeoArcade + thêm game #2.

@@ -2,6 +2,12 @@
 .venv/
 __pycache__/
 *.pyc
+*.egg-info/
+build/
+dist/
+
+# Dữ liệu runtime
+neoarcade.db
 
 # Brainstorm companion + ảnh render tạm
 .superpowers/
@@ -9,6 +15,7 @@ prototype/*.png
 prototype/fd_*.png
 prototype/shot_*.png
 prototype/cricket_*.png
+/fp_*.png
 
 # macOS
 .DS_Store
