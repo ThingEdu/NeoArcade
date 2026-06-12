@@ -29,6 +29,9 @@ class HandCamera:
     has_camera = True
 
     def __init__(self, max_hands: int = 2, cam: int = 0):
+        # Import cv2/mediapipe Ở ĐÂY (sau pygame.init() của app) để SDL của pygame
+        # nạp trước → cảnh báo "Class SDL... implemented in both" của macOS là VÔ HẠI:
+        # ta chỉ dùng cv2 để đọc webcam, cửa sổ luôn là của pygame.
         import cv2
         import mediapipe as mp
         self.cv2 = cv2

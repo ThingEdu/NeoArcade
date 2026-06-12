@@ -39,8 +39,10 @@ make test        # 48 test (engine/storage/input/controller × 3 game)
 ```
 Hoặc: `python -m neoarcade.app` · `… .dexe.app` · `… .batde.app`
 
-**Bắt Dế (camera)**: `pip install -e ".[vision]"` (opencv + mediapipe) rồi `make run-batde`.
+**Bắt Dế (camera)**: `pip install -e ".[vision]"` (opencv-headless + mediapipe) rồi `make run-batde`.
 Lần đầu macOS sẽ hỏi quyền **Camera** cho Terminal/Python — cần cho phép.
+_Lưu ý:_ trên macOS có thể in cảnh báo `objc[..]: Class SDL... implemented in both` (cv2 và pygame
+đều kèm SDL) — **vô hại**: ta chỉ dùng cv2 để đọc webcam, cửa sổ là của pygame (nạp SDL trước).
 
 **2 nút (khớp ThingBot)** — Nút 1 = `SPACE`/`W`, Nút 2 = `ENTER`/`↑`, `ESC` thoát.
 Menu: Nút1 = Solo, Nút2 = Đấu · Trong trận: Nút1 = P1, Nút2 = P2 · Kết quả: Nút1 = chơi lại, Nút2 = menu.
