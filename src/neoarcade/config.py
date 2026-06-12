@@ -14,6 +14,14 @@ GROUND_H = 80
 BASE_SPEED = 220.0
 SPEED_PER_POINT = 6.0
 
+# ---- Bắt Dế (camera + bàn tay) ----
+CATCH_FLOCK = 8           # số Dế giữ trên màn (đàn = cluster)
+CATCH_R = 48              # bán kính bắt (tay chạm Dế)
+FLEE_R = 125              # Dế bỏ chạy khi tay tới gần
+CRICKET_SPEED = 140.0     # tốc độ lang thang
+CRICKET_FLEE = 330.0      # tốc độ bỏ chạy
+CATCH_TIME = 45.0         # giây mỗi lượt
+
 # ---- Đua Xe Dế (top-down lane runner) ----
 CAR_W, CAR_H = 50, 78
 ROAD_MARGIN = 64          # lề cỏ/nhà 2 bên trong mỗi view

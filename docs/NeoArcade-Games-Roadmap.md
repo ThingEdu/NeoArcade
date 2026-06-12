@@ -42,7 +42,7 @@ Nguyên tắc thiết kế: game chỉ nghe lệnh trừu tượng (`flap`, `ste
 - **Chơi**: SOLO đua điểm + ĐẤU 2 NGƯỜI đua tới đích. Mascot Dế né "thân sậy".
 - **Blue**: dòng chảy năng lượng không ngừng (**flow**); giữ Dế lơ lửng = **balance**.
 
-### 3.2 Bắt Dế (Camera) — tương tác tay qua webcam
+### 3.2 Bắt Dế (Camera) — tương tác tay qua webcam  🛠️ prototype (engine+test) DONE
 - **Vận động**: vung tay, với, toàn thân; phối hợp tay-mắt.
 - **Input**: **webcam + MediaPipe** (nhận bàn tay/cử chỉ) — tái dùng Vision Core của
   [[project_neomakervigate_status]] (PyQt6 + MediaPipe đã chạy 29.7fps).
@@ -107,7 +107,7 @@ cùng một thế giới Dế.
 | **0** ✅ | FlappyDe prototype (button) | nút bấm | kiểm chứng công thức + brand |
 | **1** ✅ | FlappyDe hoàn thiện (engine/test/leaderboard/âm thanh) + **Đua Xe Dế prototype** (engine+test, top-down lái né + hốt năng lượng) | nút + trục lái | 2 input nền (digital + analog); còn analog phần cứng thật |
 | **2** | **Bóng Rổ Dế** + **Đấm Sức Mạnh** | chạm, rung/gia tốc | game cảm biến vật lý |
-| **3** | **Bắt Dế** (camera) | webcam + MediaPipe | thị giác, tái dùng NeoMakerViGate |
+| **3** 🛠️ | **Bắt Dế prototype** (webcam + MediaPipe Hands, fallback chuột; cluster/balance) | webcam + MediaPipe | thị giác; còn acceptance camera thật + 2 tay |
 | **4** | Nhảy Xa · Thăng Bằng · Nhịp · Nước Rút | đế cảm ứng, nghiêng | phủ hết nhóm vận động |
 | **5** | Đóng gói catalog **NeoArcade launcher** + đưa lên [[project_neoplay_status]] | — | phát hành |
 
