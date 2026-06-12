@@ -6,6 +6,9 @@ install:
 run:            ## chạy với phần cứng ThingBot
 	.venv/bin/python -m neoarcade.app --profile thingbot
 
+hub:            ## Màn hình tổng — chọn game (launcher)
+	.venv/bin/python -m neoarcade.hub
+
 run-sim:        ## FlappyDe bằng bàn phím (không cần phần cứng)
 	.venv/bin/python -m neoarcade.app --profile keyboard
 

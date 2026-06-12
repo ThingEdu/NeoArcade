@@ -15,6 +15,7 @@ vision = ["opencv-python-headless>=4.8", "mediapipe>=0.10"]   # Bắt Dế (came
 dev = ["pytest>=8", "ruff>=0.6"]
 
 [project.scripts]
+neoarcade = "neoarcade.hub:main"
 flappyde = "neoarcade.app:main"
 dexe = "neoarcade.dexe.app:main"
 batde = "neoarcade.batde.app:main"
