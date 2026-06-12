@@ -18,9 +18,29 @@ Chạy:  .venv/bin/python flappyde.py
 from __future__ import annotations
 
 import math
+import os
 import random
 
 import pygame
+
+ASSET_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
+
+
+def load_logo():
+    """Logo Dế Foundation (nền trong suốt). None nếu thiếu file → fallback chữ."""
+    try:
+        return pygame.image.load(os.path.join(ASSET_DIR, "logo_de.png")).convert_alpha()
+    except Exception:
+        return None
+
+
+def scale_to(img, w=None, h=None):
+    iw, ih = img.get_size()
+    if w is None:
+        w = int(iw * h / ih)
+    if h is None:
+        h = int(ih * w / iw)
+    return pygame.transform.smoothscale(img, (w, h))
 
 # ---------- Cấu hình ----------
 W, H = 900, 600
@@ -323,6 +343,9 @@ class FlappyDe:
         self.f_md = font(26)
         self.f_sm = font(18)
         self.best = 0
+        logo = load_logo()
+        self.logo_big = scale_to(logo, w=250) if logo else None     # menu
+        self.logo_sm = scale_to(logo, h=24) if logo else None       # watermark
         self.menu_clouds = [Cloud(W) for _ in range(4)]
         self.state = "menu"   # menu | countdown | play | result
         self.mode = None      # solo | duel
@@ -409,14 +432,19 @@ class FlappyDe:
         s.blit(make_sky(W, H), (0, 0))
         for c in self.menu_clouds:
             c.draw(s)
-        draw_cricket(s, W // 2 - 150, 180, BLUE_ELECTRIC, 1.0, 0.4, 8)
-        draw_cricket(s, W // 2 + 150, 180, ORANGE_HOT, 1.0, 0.8, -8, band=GREEN_LIME)
-        self._center_text(self.f_hero, "FlappyDe", W // 2, 120, BLUE_ELECTRIC)
-        self._center_text(self.f_sm, "NeoArcade · Dế Foundation", W // 2, 168, GREEN_CRICKET)
+        # logo Dế Foundation thật ở đỉnh
+        if self.logo_big:
+            s.blit(self.logo_big, self.logo_big.get_rect(center=(W // 2, 56)))
+        else:
+            self._center_text(self.f_sm, "Dế Foundation", W // 2, 50, BLUE_ELECTRIC)
+        draw_cricket(s, W // 2 - 250, 158, BLUE_ELECTRIC, 1.0, 0.4, 8)
+        draw_cricket(s, W // 2 + 250, 158, ORANGE_HOT, 1.0, 0.8, -8, band=GREEN_LIME)
+        self._center_text(self.f_hero, "FlappyDe", W // 2, 148, BLUE_ELECTRIC)
+        self._center_text(self.f_sm, "NeoArcade", W // 2, 198, GREEN_CRICKET)
         # 2 thẻ chế độ
-        self._mode_card(W // 2 - 180, 300, "SOLO", "Đua bảng điểm", "Nhấn  SPACE", BLUE_ELECTRIC)
-        self._mode_card(W // 2 + 180, 300, "ĐẤU 2 NGƯỜI", "Đua tới đích", "Nhấn  ENTER", ORANGE_HOT)
-        self._center_text(self.f_sm, f"Điều khiển: {CONTROL_PROFILE}   ·   ESC để thoát", W // 2, H - 70, INK)
+        self._mode_card(W // 2 - 180, 322, "SOLO", "Đua bảng điểm", "Nhấn  SPACE", BLUE_ELECTRIC)
+        self._mode_card(W // 2 + 180, 322, "ĐẤU 2 NGƯỜI", "Đua tới đích", "Nhấn  ENTER", ORANGE_HOT)
+        self._center_text(self.f_sm, f"Điều khiển: {CONTROL_PROFILE}   ·   ESC để thoát", W // 2, H - 56, INK)
 
     def _mode_card(self, cx, cy, title, sub, key, accent):
         card = pygame.Rect(0, 0, 300, 180)
@@ -495,10 +523,17 @@ class FlappyDe:
 
     def _wordmark(self):
         s = self.screen
-        pill = pygame.Rect(14, H - 36, 232, 26)
-        self._round(pill, WHITE, BLUE_ELECTRIC, 2, 13)
-        pygame.draw.circle(s, BLUE_ELECTRIC, (pill.left + 15, pill.centery), 6)
-        self._text(self.f_sm, "FlappyDe · NeoArcade prototype", pill.left + 28, pill.centery - 9, INK)
+        if self.logo_sm:
+            lw, lh = self.logo_sm.get_size()
+            txt = self.f_sm.render("FlappyDe", True, INK)
+            pill = pygame.Rect(14, H - 38, 12 + lw + 10 + txt.get_width() + 12, lh + 8)
+            self._round(pill, WHITE, BLUE_ELECTRIC, 2, 13)
+            s.blit(self.logo_sm, (pill.left + 12, pill.centery - lh // 2))
+            s.blit(txt, (pill.left + 12 + lw + 10, pill.centery - txt.get_height() // 2))
+        else:
+            pill = pygame.Rect(14, H - 36, 220, 26)
+            self._round(pill, WHITE, BLUE_ELECTRIC, 2, 13)
+            self._text(self.f_sm, "FlappyDe · NeoArcade", pill.left + 14, pill.centery - 9, INK)
 
     # ---- input ----
     def on_key(self, key):
