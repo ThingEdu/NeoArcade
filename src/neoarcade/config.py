@@ -14,6 +14,19 @@ GROUND_H = 80
 BASE_SPEED = 220.0
 SPEED_PER_POINT = 6.0
 
+# ---- Đua Xe Dế (top-down lane runner) ----
+CAR_W, CAR_H = 50, 78
+ROAD_MARGIN = 64          # lề cỏ/nhà 2 bên trong mỗi view
+STEER_SPEED = 360.0       # px/s khi cần lái = ±1
+RACE_SPEED = 300.0        # tốc độ tiến (px/s)
+RACE_SPEED_PER = 0.06     # solo: nhanh dần theo quãng đường
+RACE_TARGET = 7200        # quãng đường về đích khi đấu (px)
+RACE_STUN = 1.0           # xoay vòng khi đụng (đấu)
+RACE_INVULN_EXTRA = 0.6
+OBSTACLE_W, OBSTACLE_H = 48, 48
+ENERGY_R = 15
+SPAWN_GAP = 210           # khoảng cách dọc giữa các hàng vật thể (px)
+
 DUEL_TARGET = 18          # số cột để về đích (đấu 2 người)
 DUEL_GAP = 195            # khe cố định khi đấu (công bằng)
 SOLO_GAP0 = 205           # khe ban đầu solo (hẹp dần)

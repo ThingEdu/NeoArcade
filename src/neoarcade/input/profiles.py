@@ -60,6 +60,33 @@ class ThingbotProfile:
         return out
 
 
+class SteerKeyboard(KeyboardProfile):
+    """Cho game lái (Đua Xe Dế): buttons() cho menu/kết quả + axes() cho trục lái.
+
+    P1 lái = A/D, P2 lái = ←/→. (ThingBot: 2 nút cho menu + cần analog cho trục lái.)
+    """
+    name = "keyboard"
+    STEER = [(pygame.K_a, pygame.K_d), (pygame.K_LEFT, pygame.K_RIGHT)]
+
+    def axes(self, n: int = 2) -> list[float]:
+        keys = pygame.key.get_pressed()
+        out = []
+        for p in range(n):
+            left, right = self.STEER[p % len(self.STEER)]
+            out.append((1.0 if keys[right] else 0.0) - (1.0 if keys[left] else 0.0))
+        return out
+
+
+def get_steer_profile(name: str = "keyboard"):
+    """Profile cho game lái. thingbot analog chưa có phần cứng ở đây → fallback keyboard."""
+    if name == "thingbot":
+        try:
+            ThingbotProfile()           # kiểm tra neo-hw; analog đọc sau khi có phần cứng
+        except Exception as exc:
+            print(f"[input] {exc} → fallback keyboard (lái A/D, ←/→)")
+    return SteerKeyboard()
+
+
 def get_profile(name: str = "keyboard"):
     """Lấy profile theo tên; tự fallback về keyboard nếu thingbot không sẵn sàng."""
     if name == "thingbot":

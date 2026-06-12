@@ -50,7 +50,7 @@ Nguyên tắc thiết kế: game chỉ nghe lệnh trừu tượng (`flap`, `ste
   khi đủ** để đàn không cạn. Solo đếm giờ / đấu ai bắt nhiều hơn.
 - **Blue**: Dế sống thành **cluster** (đàn); chỉ bắt loài **local**; bắt vừa đủ để **balance** hệ.
 
-### 3.3 Đua Xe Dế — lái bằng cần analog ThingBot
+### 3.3 Đua Xe Dế — lái bằng cần analog ThingBot  🛠️ prototype (engine+test) DONE
 - **Vận động**: vận động tinh ngón/cổ tay (lái, ga); phản xạ tránh.
 - **Input**: **cần analog/joystick** trên ThingBot (đọc giá trị ADC) để lái + nút ga;
   bản đơn giản chỉ 2 nút trái/phải.
@@ -105,7 +105,7 @@ cùng một thế giới Dế.
 | Phase | Nội dung | Input mới | Mục tiêu |
 |---|---|---|---|
 | **0** ✅ | FlappyDe prototype (button) | nút bấm | kiểm chứng công thức + brand |
-| **1** | Hoàn thiện FlappyDe (tách engine/TDD/`thingbot`) + **Đua Xe Dế** | cần analog | 2 input nền (digital + analog) |
+| **1** ✅ | FlappyDe hoàn thiện (engine/test/leaderboard/âm thanh) + **Đua Xe Dế prototype** (engine+test, top-down lái né + hốt năng lượng) | nút + trục lái | 2 input nền (digital + analog); còn analog phần cứng thật |
 | **2** | **Bóng Rổ Dế** + **Đấm Sức Mạnh** | chạm, rung/gia tốc | game cảm biến vật lý |
 | **3** | **Bắt Dế** (camera) | webcam + MediaPipe | thị giác, tái dùng NeoMakerViGate |
 | **4** | Nhảy Xa · Thăng Bằng · Nhịp · Nước Rút | đế cảm ứng, nghiêng | phủ hết nhóm vận động |

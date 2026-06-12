@@ -1,0 +1,77 @@
+"""Đua Xe Dế — vòng lặp chính (lái bằng trục: A/D, ←/→ hoặc cần analog ThingBot).
+
+  python -m neoarcade.dexe.app --profile keyboard
+"""
+from __future__ import annotations
+
+import argparse
+import os
+
+import pygame
+
+from neoarcade import config as C
+from neoarcade.dexe.game import RaceController
+from neoarcade.dexe.render import RaceRenderer
+from neoarcade.input.profiles import get_steer_profile
+from neoarcade.storage.db import Leaderboard
+from neoarcade.ui.sound import SoundManager
+
+
+def _sounds(snd, ev, prev_tick):
+    for st in ev.steps:
+        if getattr(st, "collected", 0):
+            snd.play("score")
+        if getattr(st, "crashed", False):
+            snd.play("hit")
+    if ev.ended:
+        snd.play("win")
+    if ev.countdown_tick is not None and ev.countdown_tick != prev_tick:
+        snd.play("count")
+    return ev.countdown_tick
+
+
+def run(profile_name="keyboard", db_path="neoarcade.db", sound=True):
+    pygame.init()
+    screen = pygame.display.set_mode((C.W, C.H))
+    pygame.display.set_caption("Đua Xe Dế — NeoArcade · Dế Foundation")
+    clock = pygame.time.Clock()
+
+    lb = Leaderboard(db_path)
+    ctrl = RaceController(leaderboard=lb)
+    profile = get_steer_profile(profile_name)
+    renderer = RaceRenderer(screen, profile_name=profile.name)
+    snd = SoundManager(enabled=sound)
+
+    prev_tick = None
+    running = True
+    while running:
+        dt = min(clock.tick(C.FPS) / 1000.0, 0.05)
+        events = pygame.event.get()
+        for e in events:
+            if e.type == pygame.QUIT:
+                running = False
+            elif e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
+                running = False
+        for btn in profile.buttons(events):
+            ctrl.press(btn)
+        axes = profile.axes(len(ctrl.worlds)) if ctrl.worlds else [0.0, 0.0]
+        ev = ctrl.update(dt, axes)
+        prev_tick = _sounds(snd, ev, prev_tick)
+        renderer.draw(ctrl, ev, lb, dt)
+        pygame.display.flip()
+
+    lb.close()
+    pygame.quit()
+
+
+def main():
+    ap = argparse.ArgumentParser(description="Đua Xe Dế — NeoArcade")
+    ap.add_argument("--profile", default="keyboard", choices=["keyboard", "thingbot"])
+    ap.add_argument("--db", default=os.environ.get("NEOARCADE_DB", "neoarcade.db"))
+    ap.add_argument("--no-sound", action="store_true")
+    args = ap.parse_args()
+    run(profile_name=args.profile, db_path=args.db, sound=not args.no_sound)
+
+
+if __name__ == "__main__":
+    main()

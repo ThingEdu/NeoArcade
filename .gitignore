@@ -15,7 +15,7 @@ prototype/*.png
 prototype/fd_*.png
 prototype/shot_*.png
 prototype/cricket_*.png
-/fp_*.png
+/*.png
 
 # macOS
 .DS_Store

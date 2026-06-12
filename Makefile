@@ -6,8 +6,11 @@ install:
 run:            ## chạy với phần cứng ThingBot
 	.venv/bin/python -m neoarcade.app --profile thingbot
 
-run-sim:        ## chạy bằng bàn phím (không cần phần cứng)
+run-sim:        ## FlappyDe bằng bàn phím (không cần phần cứng)
 	.venv/bin/python -m neoarcade.app --profile keyboard
+
+run-dexe:       ## Đua Xe Dế bằng bàn phím (lái A/D, ←/→)
+	.venv/bin/python -m neoarcade.dexe.app --profile keyboard
 
 test:
 	.venv/bin/python -m pytest -q
