@@ -92,9 +92,10 @@ def make_sky(w, h):
         s = pygame.Surface((w, h))
         for y in range(h):
             s.fill(lerp(BLUE_CYAN, BLUE_SOFT, (y / h) ** 0.8), (0, y, w, 1))
-        # mặt trời cam (góc trên phải) — chất 'bình minh'
-        pygame.draw.circle(s, ORANGE_WARM, (w - 70, 70), 38)
-        pygame.draw.circle(s, (*ORANGE_HOT, 60), (w - 70, 70), 52, 6)
+        # mặt trời cam — chỉ vẽ ở màn lớn (menu/solo); màn chia đôi bỏ để khỏi chen HUD
+        if w >= 700:
+            pygame.draw.circle(s, ORANGE_WARM, (w - 70, 70), 38)
+            pygame.draw.circle(s, (*ORANGE_HOT, 60), (w - 70, 70), 52, 6)
         _sky_cache[key] = s
     return _sky_cache[key]
 
@@ -462,20 +463,26 @@ class FlappyDe:
         self._text(self.f_sm, f"Kỷ lục {self.best}", 20, 22, INK)
 
     def _hud_duel(self):
+        half = W // 2
         for i, w in enumerate(self.worlds):
-            cx = i * (W // 2) + W // 4
+            x0 = i * half
             accent = BLUE_ELECTRIC if i == 0 else ORANGE_HOT
-            self._text(self.f_md, w.label, i * (W // 2) + 16, 14, accent)
-            # thanh tiến độ về đích
-            bar = pygame.Rect(i * (W // 2) + 16, 50, W // 2 - 32, 16)
-            self._round(bar, WHITE, accent, 2, 8)
-            fill = bar.copy()
-            fill.width = int((W // 2 - 32) * min(1, w.score / DUEL_TARGET))
-            if fill.width > 6:
-                self._round(fill, accent, None, 0, 8)
-            self._text(self.f_sm, f"{w.score}/{DUEL_TARGET} cột", i * (W // 2) + 16, 70, INK)
+            # dải header gọn, nằm trong lề mỗi nửa (che phần trên cho sạch)
+            strip = pygame.Rect(x0 + 10, 10, half - 20, 46)
+            self._round(strip, (247, 247, 247, 235), accent, 4, 14)
+            self._text(self.f_md, w.label, strip.left + 14, strip.top + 3, accent)
+            sc = self.f_sm.render(f"{w.score}/{DUEL_TARGET} cột", True, INK)
+            self.screen.blit(sc, (strip.right - 14 - sc.get_width(), strip.top + 8))
+            # thanh tiến độ về đích (trong header)
+            bar = pygame.Rect(strip.left + 14, strip.bottom - 15, strip.width - 28, 9)
+            self._round(bar, BLUE_SOFT, None, 0, 5)
+            fw = int(bar.width * min(1, w.score / DUEL_TARGET))
+            if fw > 5:
+                fb = bar.copy()
+                fb.width = fw
+                self._round(fb, accent, None, 0, 5)
             if w.stun > 0:
-                self._center_text(self.f_md, "CHOÁNG!", cx, H // 2, PINK_HOT, panel=True)
+                self._center_text(self.f_md, "CHOÁNG!", x0 + half // 2, H // 2, PINK_HOT, panel=True)
 
     def _draw_result(self):
         ov = pygame.Surface((W, H), pygame.SRCALPHA)
