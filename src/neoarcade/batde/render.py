@@ -34,7 +34,9 @@ class CatchRenderer:
         self._brand_bg = self._make_brand_bg()
         self.fx: list = []
         self.dim = pygame.Surface((C.W, C.H), pygame.SRCALPHA)
-        self.dim.fill((10, 16, 40, 110))
+        self.dim.fill((10, 16, 40, 85))            # nền trận: mờ nhẹ để Dế nổi
+        self.menu_dim = pygame.Surface((C.W, C.H), pygame.SRCALPHA)
+        self.menu_dim.fill((10, 16, 40, 120))      # menu: mờ hơn cho chữ dễ đọc
 
     def _make_brand_bg(self):
         s = pygame.Surface((C.W, C.H))
@@ -70,7 +72,9 @@ class CatchRenderer:
         self.fx = [p for p in self.fx if p.life > 0]
 
         if ctrl.state == ctrl.MENU:
-            self._menu(ctrl, lb)
+            self._menu(ctrl, lb, bg)
+            for h in hands:                         # hiện con trỏ tay ngay ở menu
+                self._cursor(h[0], h[1], C.GREEN_LIME)
             wordmark(self.screen, self.f_sm, self.logo_sm, "Bắt Dế · NeoArcade")
             return
 
@@ -129,9 +133,13 @@ class CatchRenderer:
         num = self.f_md.render(str(n), True, C.INK)
         self.screen.blit(num, (r.right - 14 - num.get_width(), r.top + 8))
 
-    def _menu(self, ctrl, lb):
+    def _menu(self, ctrl, lb, bg=None):
         s = self.screen
-        s.blit(self._brand_bg, (0, 0))
+        if bg is not None:                          # thấy webcam ngay ở menu
+            s.blit(bg, (0, 0))
+            s.blit(self.menu_dim, (0, 0))
+        else:
+            s.blit(self._brand_bg, (0, 0))
         if self.logo_big:
             s.blit(self.logo_big, self.logo_big.get_rect(center=(C.W // 2, 60)))
         draw_cricket(s, C.W // 2 - 250, 160, C.BLUE_ELECTRIC, 1.0, 0.6, 6)

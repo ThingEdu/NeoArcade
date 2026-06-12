@@ -7,9 +7,15 @@ read() → (bg_surface | None, hands_px)  với hands_px = list[(x, y)] trong h�
 """
 from __future__ import annotations
 
+import os
+
 import pygame
 
 from neoarcade import config as C
+
+_MODEL = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "assets", "hand_landmarker.task")
 
 
 class MouseHands:
@@ -34,13 +40,21 @@ class HandCamera:
         # ta chỉ dùng cv2 để đọc webcam, cửa sổ luôn là của pygame.
         import cv2
         import mediapipe as mp
+        from mediapipe.tasks import python as mp_python
+        from mediapipe.tasks.python import vision
+
+        if not os.path.exists(_MODEL):
+            raise RuntimeError(f"Thiếu model {_MODEL}")
         self.cv2 = cv2
+        self.mp = mp
         self.cap = cv2.VideoCapture(cam)
         if not self.cap.isOpened():
             raise RuntimeError("Không mở được webcam")
-        self.hands = mp.solutions.hands.Hands(
-            max_num_hands=max_hands, model_complexity=0,
-            min_detection_confidence=0.6, min_tracking_confidence=0.5)
+        opts = vision.HandLandmarkerOptions(
+            base_options=mp_python.BaseOptions(model_asset_path=_MODEL),
+            running_mode=vision.RunningMode.VIDEO, num_hands=max_hands)
+        self.landmarker = vision.HandLandmarker.create_from_options(opts)
+        self._ts = 0
 
     def read(self):
         ok, frame = self.cap.read()
@@ -48,12 +62,13 @@ class HandCamera:
             return None, []
         frame = self.cv2.flip(frame, 1)                      # soi gương (selfie)
         rgb = self.cv2.cvtColor(frame, self.cv2.COLOR_BGR2RGB)
-        res = self.hands.process(rgb)
+        mp_img = self.mp.Image(image_format=self.mp.ImageFormat.SRGB, data=rgb)
+        self._ts += int(1000 / C.FPS)
+        res = self.landmarker.detect_for_video(mp_img, self._ts)
         hands_px = []
-        if res.multi_hand_landmarks:
-            for lm in res.multi_hand_landmarks:
-                tip = lm.landmark[8]                         # đầu ngón trỏ
-                hands_px.append((tip.x * C.W, tip.y * C.H))
+        for lm in res.hand_landmarks:                        # mỗi tay: 21 điểm
+            tip = lm[8]                                      # đầu ngón trỏ
+            hands_px.append((tip.x * C.W, tip.y * C.H))
         surf = pygame.image.frombuffer(rgb.tobytes(), (rgb.shape[1], rgb.shape[0]), "RGB")
         if surf.get_size() != (C.W, C.H):
             surf = pygame.transform.smoothscale(surf, (C.W, C.H))
@@ -62,7 +77,7 @@ class HandCamera:
     def close(self):
         try:
             self.cap.release()
-            self.hands.close()
+            self.landmarker.close()
         except Exception:
             pass
 
