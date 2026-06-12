@@ -11,14 +11,12 @@ dependencies = ["pygame-ce>=2.5"]
 
 [project.optional-dependencies]
 hardware = ["neo-hw"]
-vision = ["opencv-python-headless>=4.8", "mediapipe>=0.10"]   # Bắt Dế (camera + bàn tay)
 dev = ["pytest>=8", "ruff>=0.6"]
 
 [project.scripts]
 neoarcade = "neoarcade.hub:main"
 flappyde = "neoarcade.app:main"
 dexe = "neoarcade.dexe.app:main"
-batde = "neoarcade.batde.app:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

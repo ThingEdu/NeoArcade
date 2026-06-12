@@ -25,10 +25,8 @@ GAMES = [
     dict(title="Đua Xe Dế", move="Lái né · vận động tinh", control="Cần lái / nút",
          module="neoarcade.dexe.app", args=["--profile", "keyboard"],
          accent=C.ORANGE_HOT, icon="car"),
-    dict(title="Bắt Dế", move="Vẫy tay · thị giác", control="Camera + bàn tay",
-         module="neoarcade.batde.app", args=["--source", "camera"],
-         accent=C.GREEN_CRICKET, icon="hand"),
 ]
+# Game camera (Bắt Dế, …) đã tách sang nền tảng riêng NeoAiSport (github.com/ThingEdu/NeoAiSport).
 
 TW, TH, GAP = 250, 310, 28
 
