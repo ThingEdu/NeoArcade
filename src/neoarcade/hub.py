@@ -111,7 +111,7 @@ class Hub:
         if self.logo_big:
             s.blit(self.logo_big, self.logo_big.get_rect(center=(C.W // 2, 54)))
         center_text(s, self.f_hero, "NeoArcade", C.W // 2, 138, C.BLUE_ELECTRIC)
-        center_text(s, self.f_sm, "Chọn trò chơi", C.W // 2, 188, C.GREEN_CRICKET)
+        center_text(s, self.f_sm, "Chọn trò chơi", C.W // 2, 188, C.GREEN_DEEP)
         for i, g in enumerate(GAMES):
             self._tile(i, g)
         center_text(s, self.f_sm, "A / D (hoặc chuột) chọn   ·   ENTER chơi   ·   ESC thoát",
@@ -130,7 +130,7 @@ class Hub:
         self._icon(g["icon"], r.centerx, r.top + 96, g["accent"])
         center_text(s, self.f_big, g["title"], r.centerx, r.top + 196, g["accent"])
         center_text(s, self.f_sm, g["move"], r.centerx, r.top + 232, C.INK)
-        center_text(s, self.f_sm, g["control"], r.centerx, r.top + 256, C.GREEN_CRICKET)
+        center_text(s, self.f_sm, g["control"], r.centerx, r.top + 256, C.GREEN_DEEP)
         if active:
             chip = pygame.Rect(0, 0, 150, 36)
             chip.center = (r.centerx, r.bottom - 26)

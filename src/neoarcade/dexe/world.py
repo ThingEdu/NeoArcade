@@ -45,12 +45,20 @@ class RaceWorld:
 
     # ---- thuộc tính ----
     @property
+    def road_left(self) -> float:
+        return (self.vw - C.ROAD_W) / 2
+
+    @property
+    def road_right(self) -> float:
+        return (self.vw + C.ROAD_W) / 2
+
+    @property
     def left(self) -> float:
-        return C.ROAD_MARGIN + C.CAR_W / 2
+        return self.road_left + C.CAR_W / 2
 
     @property
     def right(self) -> float:
-        return self.vw - C.ROAD_MARGIN - C.CAR_W / 2
+        return self.road_right - C.CAR_W / 2
 
     @property
     def speed(self) -> float:

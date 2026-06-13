@@ -95,7 +95,7 @@ class RaceRenderer:
     def _road(self, surf, world, accent, idx):
         vw, vh = world.vw, world.vh
         surf.fill(C.GREEN_CRICKET)
-        rl, rr = C.ROAD_MARGIN, vw - C.ROAD_MARGIN
+        rl, rr = int(world.road_left), int(world.road_right)
         self._buildings(surf, world, 0, rl)
         self._buildings(surf, world, rr, vw)
         pygame.draw.rect(surf, ROAD, (rl, 0, rr - rl, vh))
