@@ -40,8 +40,8 @@ BR_TIME = 45.0            # giây mỗi lượt
 BR_LAUNCH_X = 110         # vị trí ném (trái dưới)
 BR_RANGE = 660            # tầm xa khi lực = 1.0
 BR_HOOP_MIN, BR_HOOP_MAX = 430, 760   # rổ ở khoảng cách ngẫu nhiên
-BR_POWER_TOL = 0.05       # sai số lực để VÀO rổ
-BR_OSC = 1.3              # số chu kỳ dao động thanh lực / giây
+BR_POWER_TOL = 0.07       # sai số lực để VÀO rổ (rộng hơn = dễ hơn)
+BR_OSC = 0.8              # số chu kỳ dao động thanh lực / giây (thấp = chậm, dễ canh)
 BR_SHOT_ANIM = 0.7        # thời gian bóng bay
 
 # ---- Đấm Bốc (đập nút thử lực / đẩy đối thủ) ----
