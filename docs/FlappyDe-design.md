@@ -1,6 +1,6 @@
 # FlappyDe — Tài liệu thiết kế
 
-> Game đầu tiên của bộ **NeoArcade** (ThingEdu). Cập nhật: 2026-06-12.
+> Game đầu tiên của bộ **NeoArcade** (ThingEdu). Cập nhật: 2026-06-13.
 
 ## 1. Tổng quan
 
@@ -38,7 +38,7 @@ Lấy từ repo `de-stem-foundation` (`docs/design-guidelines.md`).
 
 - **1 nút / người**: nhấn = Dế vỗ cánh bay lên; không nhấn = trọng lực kéo rơi.
 - Sậy mọc trên/dưới chừa 1 khe; qua mỗi cột +1 điểm.
-- Va chạm trần/đất/sậy → tuỳ chế độ (chết hoặc choáng).
+- Va chạm **đất/sậy** → chết (solo) hoặc choáng (đấu). **Bay vượt trần KHÔNG chết** (xem §3.3).
 - Vòng đời màn hình: `MENU → ĐẾM 3-2-1 → CHƠI → KẾT QUẢ → (MENU)`.
 
 ### 3.1 Chế độ SOLO (đua bảng điểm)
@@ -50,6 +50,18 @@ Lấy từ repo `de-stem-foundation` (`docs/design-guidelines.md`).
 - Đua tới **vạch đích cố định** (mặc định 18 cột). Ai về trước **THẮNG ngay**.
 - Đụng sậy **không chết** mà **choáng ~1.2s + lùi nhẹ** (mất thời gian) rồi chơi tiếp
   → cuộc đua luôn căng tới phút chót. Có thanh tiến độ + màn ăn mừng người thắng.
+
+### 3.3 🤫 Bí mật "Thế giới đêm" — _NỘI BỘ, KHÔNG đưa vào hướng dẫn người chơi_
+
+> Đây là **easter egg** để người chơi **tự khám phá** (là *tip*, không hướng dẫn). Tài liệu
+> này (repo NeoArcade private) ghi lại cho đội phát triển bảo trì; **không công bố cách kích
+> hoạt** trong README công khai / poster / video hướng dẫn.
+
+- **Kích hoạt**: bay **vượt lên trên đỉnh màn hình** (y < −bán kính Dế) → mở thế giới đêm 1 lần/ván.
+- **Hiệu ứng**: trời chuyển tối + đầy sao; **mặt trời lặn xuống → mặt trăng mọc**; **sậy phát sáng**
+  viền lime; fanfare nhỏ.
+- **Độ khó**: đêm **nhanh hơn** (`NIGHT_SPEED=1.15`) + **khe hẹp hơn** (`NIGHT_GAP=14`) — "khó hơn do trời tối".
+- Code: `engine/world.py` cờ `night` + `StepResult.night`; `ui/render.py` chuyển cảnh ngày↔đêm.
 
 ## 4. Hồ sơ điều khiển (control profiles)
 
