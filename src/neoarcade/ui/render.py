@@ -29,6 +29,35 @@ def make_sky(w, h):
     return _sky_cache[key]
 
 
+_daysky_cache: dict = {}
+_nightsky_cache: dict = {}
+NIGHT_TOP = (12, 16, 46)
+NIGHT_BOT = (30, 44, 92)
+
+
+def _day_sky(w, h):
+    if (w, h) not in _daysky_cache:
+        s = pygame.Surface((w, h))
+        for y in range(h):
+            s.fill(lerp(C.BLUE_CYAN, C.BLUE_SOFT, (y / h) ** 0.8), (0, y, w, 1))
+        _daysky_cache[(w, h)] = s
+    return _daysky_cache[(w, h)]
+
+
+def _night_sky(w, h):
+    if (w, h) not in _nightsky_cache:
+        s = pygame.Surface((w, h))
+        for y in range(h):
+            s.fill(lerp(NIGHT_TOP, NIGHT_BOT, (y / h) ** 0.8), (0, y, w, 1))
+        rng = random.Random(99)
+        for _ in range(60):
+            x, yy = rng.randint(0, w), rng.randint(0, int(h * 0.7))
+            c = rng.choice([(255, 255, 255), (200, 220, 255), (255, 245, 210)])
+            pygame.draw.circle(s, c, (x, yy), rng.randint(1, 2))
+        _nightsky_cache[(w, h)] = s
+    return _nightsky_cache[(w, h)]
+
+
 class Cloud:
     def __init__(self, w):
         self.w = w
@@ -83,10 +112,13 @@ class WorldView:
         self.wing = 0.0
         self.scroll = 0.0
         self.rot = 0.0
+        self.night_t = 0.0           # 0 = ngày, 1 = đêm (chuyển mượt)
 
     def feed(self, dt, world, step, flapped, playing):
         self.squash += (1.0 - self.squash) * min(1, dt * 12)
         self.wing = max(0.0, self.wing - dt * 6)
+        if world.night:
+            self.night_t = min(1.0, self.night_t + dt * 1.4)   # lặn dần ~0.7s
         for c in self.clouds:
             c.update(dt)
         if flapped:
@@ -109,12 +141,36 @@ class WorldView:
             p.update(dt)
         self.particles = [p for p in self.particles if p.life > 0]
 
+    def _orb(self, surf, x, y, r, color, alpha, ring=None, crescent=False):
+        if alpha <= 0:
+            return
+        d = r * 3
+        s = pygame.Surface((d, d), pygame.SRCALPHA)
+        c = d // 2
+        if ring:
+            pygame.draw.circle(s, (*ring, max(0, alpha - 110)), (c, c), r + 12, 5)
+        pygame.draw.circle(s, (*color, alpha), (c, c), r)
+        if crescent:                                   # khoét bóng tạo lưỡi liềm
+            pygame.draw.circle(s, (*NIGHT_TOP, alpha), (c + r // 2, c - 3), r - 3)
+        surf.blit(s, (x - c, y - c))
+
     def render(self, surf, world):
-        surf.blit(make_sky(self.vw, self.vh), (0, 0))
+        nt = self.night_t
+        surf.blit(_day_sky(self.vw, self.vh), (0, 0))
+        if nt < 1.0:                                   # mặt trời lặn dần xuống
+            self._orb(surf, self.vw - 70, int(70 + nt * (self.vh + 80)), 38,
+                      C.ORANGE_WARM, int((1 - nt) * 255), ring=C.ORANGE_HOT)
+        if nt > 0:                                     # phủ màn đêm + mặt trăng mọc
+            ns = _night_sky(self.vw, self.vh)
+            ns.set_alpha(int(nt * 255))
+            surf.blit(ns, (0, 0))
+            self._orb(surf, self.vw - 70, int(70 - (1 - nt) * 120), 34,
+                      (226, 232, 248), int(nt * 255), crescent=True)
         for c in self.clouds:
-            c.draw(surf)
+            if nt < 0.85:
+                c.draw(surf)
         for px, gy, _ in world.pipes:
-            self._reed(surf, px, gy, world.gap)
+            self._reed(surf, px, gy, world.gap, nt)
         top = self.vh - C.GROUND_H
         pygame.draw.rect(surf, C.GREEN_CRICKET, (0, top, self.vw, C.GROUND_H))
         pygame.draw.rect(surf, C.GREEN_LIME, (0, top, self.vw, 9))
@@ -127,10 +183,15 @@ class WorldView:
         if not flash:
             draw_cricket(surf, world.bird_x, world.y, self.color, self.squash, self.wing, self.rot, self.band)
 
-    def _reed(self, surf, x, gy, gap):
+    def _reed(self, surf, x, gy, gap, nt=0.0):
         half = gap // 2
         for is_top, rect in ((True, pygame.Rect(x, 0, C.PIPE_W, gy - half)),
                              (False, pygame.Rect(x, gy + half, C.PIPE_W, self.vh))):
+            if nt > 0.12:                              # đêm: sậy phát sáng (viền lime toả)
+                g = pygame.Surface((rect.width + 24, rect.height + 24), pygame.SRCALPHA)
+                pygame.draw.rect(g, (*C.GREEN_LIME, int(nt * 130)),
+                                 (0, 0, rect.width + 24, rect.height + 24), width=10, border_radius=24)
+                surf.blit(g, (rect.x - 12, rect.y - 12))
             pygame.draw.rect(surf, C.GREEN_CRICKET, rect, border_radius=16)
             pygame.draw.rect(surf, C.GREEN_DEEP, (rect.x + 12, rect.y + (6 if is_top else 0), 12, rect.height - 6), border_radius=6)
             pygame.draw.rect(surf, C.GREEN_LIME, rect, width=4, border_radius=16)

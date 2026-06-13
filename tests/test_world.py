@@ -42,11 +42,18 @@ def test_solo_dies_on_ground():
     assert w.dead is True and r.hit is True
 
 
-def test_solo_dies_on_ceiling():
+def test_fly_above_top_opens_night_not_death():
     w = w_solo()
-    w.y = 5
+    w.y = -30                       # bay vượt đỉnh màn hình
     r = w.update(1 / 60)
-    assert w.dead is True
+    assert w.night is True and r.night is True and w.dead is False
+
+
+def test_night_is_faster_and_tighter():
+    w = w_solo()
+    s0, g0 = w.speed, w.gap
+    w.night = True
+    assert w.speed > s0 and w.gap < g0
 
 
 def test_solo_gap_shrinks_with_score():

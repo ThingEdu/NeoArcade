@@ -13,6 +13,8 @@ PIPE_SPACING = 270
 GROUND_H = 80
 BASE_SPEED = 220.0
 SPEED_PER_POINT = 6.0
+NIGHT_SPEED = 1.15        # đêm: nhanh hơn (khó hơn do trời tối)
+NIGHT_GAP = 14            # đêm: khe hẹp hơn ngần này
 
 # ---- Bắt Dế (camera + bàn tay) ----
 CATCH_FLOCK = 8           # số Dế giữ trên màn (đàn = cluster)

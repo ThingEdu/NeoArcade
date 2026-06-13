@@ -12,6 +12,7 @@ class StepResult:
     passed: int = 0      # số cột vừa vượt qua trong bước này
     hit: bool = False
     finished: bool = False
+    night: bool = False  # vừa mở "thế giới đêm" (bay vượt đỉnh màn hình)
 
 
 class World:
@@ -40,17 +41,18 @@ class World:
         self.invuln = 0.0
         self.dead = False
         self.finished = False
+        self.night = False               # thế giới đêm (easter egg)
 
     # ---- thuộc tính dẫn xuất ----
     @property
     def speed(self) -> float:
-        return C.BASE_SPEED + (self.score * C.SPEED_PER_POINT if self.solo_hard else 0)
+        base = C.BASE_SPEED + (self.score * C.SPEED_PER_POINT if self.solo_hard else 0)
+        return base * (C.NIGHT_SPEED if self.night else 1.0)
 
     @property
     def gap(self) -> int:
-        if self.target is not None:
-            return C.DUEL_GAP
-        return max(C.SOLO_GAP_MIN, C.SOLO_GAP0 - self.score * 2)
+        g = C.DUEL_GAP if self.target is not None else max(C.SOLO_GAP_MIN, C.SOLO_GAP0 - self.score * 2)
+        return max(C.SOLO_GAP_MIN - 12, g - C.NIGHT_GAP) if self.night else g
 
     @property
     def stunned(self) -> bool:
@@ -91,6 +93,11 @@ class World:
         self.v += C.GRAVITY * dt
         self.y += self.v * dt
 
+        # bay VƯỢT ĐỈNH màn hình → mở "thế giới đêm" (1 lần)
+        if not self.night and self.y < -C.BIRD_R:
+            self.night = True
+            res.night = True
+
         if not self.pipes or self.pipes[-1][0] < self.vw - C.PIPE_SPACING:
             self._spawn()
         for pipe in self.pipes:
@@ -111,7 +118,8 @@ class World:
 
     def _hit(self) -> bool:
         bx, by, br = self.bird_x, self.y, C.BIRD_R
-        if by - br < 0 or by + br > self.vh - C.GROUND_H:
+        # KHÔNG chết khi vượt trần (để mở thế giới đêm); chỉ chết khi chạm đất
+        if by + br > self.vh - C.GROUND_H:
             return True
         for px, gy, _ in self.pipes:
             if px < bx + br and px + C.PIPE_W > bx - br:

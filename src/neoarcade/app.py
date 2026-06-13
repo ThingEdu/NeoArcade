@@ -26,6 +26,8 @@ def _play_sounds(snd, ev, prev_tick):
             snd.play("score")
         if st.hit:
             snd.play("hit")
+        if st.night:
+            snd.play("win")          # mở thế giới đêm — fanfare nhỏ
     if ev.ended:
         snd.play("win")
     if ev.countdown_tick is not None and ev.countdown_tick != prev_tick:
