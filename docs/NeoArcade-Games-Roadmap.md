@@ -110,7 +110,7 @@ cùng một thế giới Dế.
 |---|---|---|---|
 | **0** ✅ | FlappyDe prototype (button) | nút bấm | kiểm chứng công thức + brand |
 | **1** ✅ | FlappyDe hoàn thiện (engine/test/leaderboard/âm thanh) + **Đua Xe Dế prototype** (engine+test, top-down lái né + hốt năng lượng) | nút + trục lái | 2 input nền (digital + analog); còn analog phần cứng thật |
-| **2** | **Bóng Rổ Dế** + **Đấm Sức Mạnh** | chạm, rung/gia tốc | game cảm biến vật lý |
+| **2** 🛠️ | **Bóng Rổ Dế** (canh lực) + **Đấm Bốc** (đập nút thử lực/đẩy) prototype | nút (cảm biến chạm/rung sau) | 2 game thể lực |
 | **3** ➡️ | **Game thị giác → tách sang NeoAiSport** (Bắt Dế đã chuyển; repo/domain/stack riêng) | webcam + MediaPipe | giữ NeoArcade nhẹ cho NEO yếu |
 | **4** | Nhảy Xa · Thăng Bằng · Nhịp · Nước Rút | đế cảm ứng, nghiêng | phủ hết nhóm vận động |
 | **5** | Đóng gói catalog **NeoArcade launcher** + đưa lên [[project_neoplay_status]] | — | phát hành |

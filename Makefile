@@ -20,3 +20,9 @@ test:
 
 lint:
 	.venv/bin/ruff check src tests
+
+run-bongro:     ## Bóng Rổ Dế (nút canh lực)
+	.venv/bin/python -m neoarcade.bongro.app --profile keyboard
+
+run-damboc:     ## Đấm Bốc (đập nút thử lực / đẩy)
+	.venv/bin/python -m neoarcade.damboc.app --profile keyboard

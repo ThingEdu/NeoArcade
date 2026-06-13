@@ -17,6 +17,8 @@ dev = ["pytest>=8", "ruff>=0.6"]
 neoarcade = "neoarcade.hub:main"
 flappyde = "neoarcade.app:main"
 dexe = "neoarcade.dexe.app:main"
+bongro = "neoarcade.bongro.app:main"
+damboc = "neoarcade.damboc.app:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

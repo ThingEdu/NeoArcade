@@ -22,13 +22,19 @@ GAMES = [
     dict(title="FlappyDe", move="Phản xạ · 1 nút", control="Nút bấm / nhảy",
          module="neoarcade.app", args=["--profile", "keyboard"],
          accent=C.BLUE_ELECTRIC, icon="cricket"),
-    dict(title="Đua Xe Dế", move="Lái né · vận động tinh", control="Cần lái / nút",
+    dict(title="Đua Xe Dế", move="Lái né · tinh", control="Cần lái / nút",
          module="neoarcade.dexe.app", args=["--profile", "keyboard"],
          accent=C.ORANGE_HOT, icon="car"),
+    dict(title="Bóng Rổ Dế", move="Ném / nhắm", control="Nút canh lực",
+         module="neoarcade.bongro.app", args=["--profile", "keyboard"],
+         accent=C.GREEN_CRICKET, icon="basket"),
+    dict(title="Đấm Bốc", move="Sức mạnh", control="Đập nút",
+         module="neoarcade.damboc.app", args=["--profile", "keyboard"],
+         accent=C.PINK_HOT, icon="boxing"),
 ]
 # Game camera (Bắt Dế, …) đã tách sang nền tảng riêng NeoAiSport (github.com/ThingEdu/NeoAiSport).
 
-TW, TH, GAP = 250, 310, 28
+TH, GAP = 300, 22
 
 
 class Hub:
@@ -46,13 +52,15 @@ class Hub:
         self.logo_sm = scale_to(logo, h=24) if logo else None
         self.sel = 0
         self.t = 0.0
+        n = len(GAMES)
+        self.tw = min(250, (C.W - 40 - (n - 1) * GAP) // n)    # tự co cho vừa nhiều thẻ
 
     def _tiles_x0(self):
         n = len(GAMES)
-        return (C.W - (n * TW + (n - 1) * GAP)) // 2
+        return (C.W - (n * self.tw + (n - 1) * GAP)) // 2
 
     def _tile_rect(self, i):
-        return pygame.Rect(self._tiles_x0() + i * (TW + GAP), 240, TW, TH)
+        return pygame.Rect(self._tiles_x0() + i * (self.tw + GAP), 250, self.tw, TH)
 
     def _tile_at(self, pos):
         for i in range(len(GAMES)):
@@ -127,13 +135,13 @@ class Hub:
         round_rect(s, r, C.WHITE, g["accent"], 6 if active else 3, 26)
         pygame.draw.circle(s, C.BLUE_SOFT, (r.left + 24, r.top + 24), 12)
         pygame.draw.circle(s, C.GREEN_LIME, (r.right - 22, r.bottom - 22), 10)
-        self._icon(g["icon"], r.centerx, r.top + 96, g["accent"])
-        center_text(s, self.f_big, g["title"], r.centerx, r.top + 196, g["accent"])
-        center_text(s, self.f_sm, g["move"], r.centerx, r.top + 232, C.INK)
-        center_text(s, self.f_sm, g["control"], r.centerx, r.top + 256, C.GREEN_DEEP)
+        self._icon(g["icon"], r.centerx, r.top + 90, g["accent"])
+        center_text(s, self.f_md, g["title"], r.centerx, r.top + 182, g["accent"])
+        center_text(s, self.f_sm, g["move"], r.centerx, r.top + 214, C.INK)
+        center_text(s, self.f_sm, g["control"], r.centerx, r.top + 238, C.GREEN_DEEP)
         if active:
-            chip = pygame.Rect(0, 0, 150, 36)
-            chip.center = (r.centerx, r.bottom - 26)
+            chip = pygame.Rect(0, 0, 140, 34)
+            chip.center = (r.centerx, r.bottom - 24)
             round_rect(s, chip, g["accent"], None, 0, 18)
             center_text(s, self.f_sm, "CHƠI  ›", chip.centerx, chip.centery, C.WHITE)
 
@@ -151,12 +159,21 @@ class Hub:
             round_rect(s, pygame.Rect(cx - w // 2 + 7, cy - h // 2 + 14, w - 14, 22), C.BLUE_SOFT, None, 0, 8)
             pygame.draw.line(s, accent, (cx - 4, body.top + 2), (cx - 11, body.top - 12), 2)
             pygame.draw.line(s, accent, (cx + 4, body.top + 2), (cx + 11, body.top - 12), 2)
-        else:  # hand: vòng bắt + con Dế
-            draw_cricket(s, cx + 18, cy + 6, C.PINK_HOT, 1.0, 0.5, -8)
+        elif kind == "basket":
+            pygame.draw.circle(s, C.ORANGE_WARM, (cx, cy + 10), 18)
+            pygame.draw.circle(s, C.INK, (cx, cy + 10), 18, 2)
+            pygame.draw.ellipse(s, C.ORANGE_HOT, (cx - 24, cy - 34, 48, 12), 4)   # vành
+            pygame.draw.rect(s, C.WHITE, (cx - 22, cy - 50, 44, 18), 3)           # bảng
+        elif kind == "boxing":
+            for sx in (-1, 1):
+                gx = cx + sx * 16
+                pygame.draw.circle(s, C.PINK_HOT, (gx, cy), 16)                    # găng
+                pygame.draw.circle(s, C.INK, (gx, cy), 16, 2)
+                pygame.draw.rect(s, C.PINK_HOT, (gx + sx * 6 - 5, cy + 10, 10, 12), border_radius=3)
+        else:  # hand
             r = 30 + int(3 * math.sin(self.t * 5))
-            pygame.draw.circle(s, C.GREEN_LIME, (cx - 8, cy), r, 6)
-            pygame.draw.circle(s, C.WHITE, (cx - 8, cy), r, 1)
-            pygame.draw.circle(s, C.GREEN_LIME, (cx - 8, cy), 6)
+            pygame.draw.circle(s, C.GREEN_LIME, (cx, cy), r, 6)
+            pygame.draw.circle(s, C.GREEN_LIME, (cx, cy), 6)
 
 
 def main():
