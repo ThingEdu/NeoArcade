@@ -24,6 +24,13 @@ def load_logo():
         return None
 
 
+def load_maker_viet():
+    try:
+        return pygame.image.load(os.path.join(ASSET_DIR, "maker_viet.png")).convert_alpha()
+    except Exception:
+        return None
+
+
 def scale_to(img, w=None, h=None):
     iw, ih = img.get_size()
     if w is None:

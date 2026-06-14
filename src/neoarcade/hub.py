@@ -15,8 +15,8 @@ import pygame
 
 from neoarcade import config as C
 from neoarcade.ui.render import make_sky
-from neoarcade.ui.sprites import draw_cricket, font, load_logo, scale_to
-from neoarcade.ui.widgets import center_text, round_rect, wordmark
+from neoarcade.ui.sprites import draw_cricket, font, load_logo, load_maker_viet, scale_to
+from neoarcade.ui.widgets import center_text, draw_text, round_rect
 
 GAMES = [
     dict(title="FlappyDe", move="Phản xạ · 1 nút", control="Nút bấm / nhảy",
@@ -34,7 +34,7 @@ GAMES = [
 ]
 # Game camera (Bắt Dế, …) đã tách sang nền tảng riêng NeoAiSport (github.com/ThingEdu/NeoAiSport).
 
-TH, GAP = 300, 22
+TH, GAP = 268, 22
 
 
 class Hub:
@@ -47,9 +47,12 @@ class Hub:
         self.f_big = font(34)
         self.f_md = font(24)
         self.f_sm = font(18)
+        self.f_xs = font(14)
         logo = load_logo()
         self.logo_big = scale_to(logo, w=250) if logo else None
         self.logo_sm = scale_to(logo, h=24) if logo else None
+        mv = load_maker_viet()
+        self.logo_mv = scale_to(mv, h=46) if mv else None
         self.sel = 0
         self.t = 0.0
         n = len(GAMES)
@@ -60,7 +63,7 @@ class Hub:
         return (C.W - (n * self.tw + (n - 1) * GAP)) // 2
 
     def _tile_rect(self, i):
-        return pygame.Rect(self._tiles_x0() + i * (self.tw + GAP), 250, self.tw, TH)
+        return pygame.Rect(self._tiles_x0() + i * (self.tw + GAP), 200, self.tw, TH)
 
     def _tile_at(self, pos):
         for i in range(len(GAMES)):
@@ -118,13 +121,40 @@ class Hub:
             draw_cricket(s, x, y, [C.BLUE_SOFT, C.GREEN_LIME, C.BLUE_CYAN][k], 1.0, 0.5, 6)
         if self.logo_big:
             s.blit(self.logo_big, self.logo_big.get_rect(center=(C.W // 2, 54)))
-        center_text(s, self.f_hero, "NeoArcade", C.W // 2, 138, C.BLUE_ELECTRIC)
-        center_text(s, self.f_sm, "Chọn trò chơi", C.W // 2, 188, C.GREEN_DEEP)
+        center_text(s, self.f_hero, "NeoArcade", C.W // 2, 132, C.BLUE_ELECTRIC)
+        center_text(s, self.f_sm, "Chọn trò chơi", C.W // 2, 182, C.GREEN_DEEP)
         for i, g in enumerate(GAMES):
             self._tile(i, g)
         center_text(s, self.f_sm, "A / D (hoặc chuột) chọn   ·   ENTER chơi   ·   ESC thoát",
-                    C.W // 2, C.H - 38, C.INK)
-        wordmark(s, self.f_sm, self.logo_sm, "NeoArcade")
+                    C.W // 2, C.H - 86, C.INK)
+        self._footer()
+
+    def _footer(self):
+        s = self.screen
+        band = pygame.Rect(0, C.H - 60, C.W, 60)
+        bs = pygame.Surface(band.size, pygame.SRCALPHA)
+        bs.fill((247, 247, 247, 230))
+        s.blit(bs, band.topleft)
+        pygame.draw.rect(s, C.BLUE_ELECTRIC, (0, band.top, C.W, 3))
+        yc = band.centery
+        x = 16
+        if self.logo_sm:
+            s.blit(self.logo_sm, (x, yc - self.logo_sm.get_height() // 2))
+            x += self.logo_sm.get_width() + 8
+        draw_text(s, self.f_sm, "NeoArcade", x, yc - 9, C.INK, shadow=False)
+        if self.logo_mv:
+            s.blit(self.logo_mv, self.logo_mv.get_rect(center=(C.W // 2, yc)))
+        self._neo_badge(C.W - 16, yc)
+
+    def _neo_badge(self, xr, yc):
+        s = self.screen
+        t1 = self.f_sm.render("NEO One", True, C.BLUE_ELECTRIC)
+        t2 = self.f_xs.render("Sản phẩm của ThingEdu", True, C.GREEN_CRICKET)
+        w = max(t1.get_width(), t2.get_width()) + 26
+        pill = pygame.Rect(xr - w, yc - 23, w, 46)
+        round_rect(s, pill, C.WHITE, C.BLUE_ELECTRIC, 2, 12)
+        s.blit(t1, (pill.centerx - t1.get_width() // 2, pill.top + 5))
+        s.blit(t2, (pill.centerx - t2.get_width() // 2, pill.top + 25))
 
     def _tile(self, i, g):
         s = self.screen
@@ -135,10 +165,10 @@ class Hub:
         round_rect(s, r, C.WHITE, g["accent"], 6 if active else 3, 26)
         pygame.draw.circle(s, C.BLUE_SOFT, (r.left + 24, r.top + 24), 12)
         pygame.draw.circle(s, C.GREEN_LIME, (r.right - 22, r.bottom - 22), 10)
-        self._icon(g["icon"], r.centerx, r.top + 90, g["accent"])
-        center_text(s, self.f_md, g["title"], r.centerx, r.top + 182, g["accent"])
-        center_text(s, self.f_sm, g["move"], r.centerx, r.top + 214, C.INK)
-        center_text(s, self.f_sm, g["control"], r.centerx, r.top + 238, C.GREEN_DEEP)
+        self._icon(g["icon"], r.centerx, r.top + 74, g["accent"])
+        center_text(s, self.f_md, g["title"], r.centerx, r.top + 158, g["accent"])
+        center_text(s, self.f_sm, g["move"], r.centerx, r.top + 190, C.INK)
+        center_text(s, self.f_sm, g["control"], r.centerx, r.top + 214, C.GREEN_DEEP)
         if active:
             chip = pygame.Rect(0, 0, 140, 34)
             chip.center = (r.centerx, r.bottom - 24)
