@@ -62,6 +62,7 @@ prototype/             # bản 1-file gốc (tham khảo)
 ```
 
 ## Tài liệu
+- [`docs/NEO-ONE-INSTALL.md`](docs/NEO-ONE-INSTALL.md) — **cài đặt & chạy trên NEO One** (ARM64/Armbian).
 - [`docs/NeoArcade-Games-Roadmap.md`](docs/NeoArcade-Games-Roadmap.md) — kế hoạch bộ game vận động, map input ThingBot, lồng Blue Economy.
 - [`docs/FlappyDe-design.md`](docs/FlappyDe-design.md) — thiết kế chi tiết FlappyDe, brand, kiến trúc.
 
