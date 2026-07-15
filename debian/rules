@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+export PYBUILD_NAME = neoarcade
+export PYBUILD_DESTDIR = debian/neoarcade
+# Tests need pygame + a display; run via `make test`, not during package build.
+export PYBUILD_DISABLE = test
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild
+
+execute_after_dh_install:
+	install -Dm644 src/neoarcade/assets/logo_de.png \
+		debian/neoarcade/usr/share/pixmaps/neoarcade.png

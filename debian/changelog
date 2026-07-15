@@ -1,0 +1,8 @@
+neoarcade (0.1.0) unstable; urgency=medium
+
+  * Initial Debian packaging.
+  * Architecture-independent package; pygame is pulled from apt
+    (python3-pygame), never built via pip, matching the ARM install
+    strategy of scripts/install_on_neo.sh.
+
+ -- Maker Việt <everwellmax@gmail.com>  Thu, 16 Jul 2026 12:00:00 +0700

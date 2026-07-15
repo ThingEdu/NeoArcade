@@ -1,124 +1,120 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# NeoArcade installer — NEO App Script Convention v0 (for NEOPlay).
-# Bộ game arcade vận động ThingBot trên NEO (Dế Foundation / ThingEdu).
+# NeoArcade Installer
+# Installs the NeoArcade .deb package from GitHub Releases.
+# Works on any apt-based system (Armbian/Debian/Ubuntu), arm64 and x86:
+# the package is Architecture: all — apt pulls python3-pygame for each
+# architecture.
 #
-# NEOPlay chạy: bash install_on_neo.sh --version=X.Y.Z   (không TTY, user thường)
-# Thủ công:     bash install_on_neo.sh --version 0.1.0
-# Gỡ:           bash install_on_neo.sh --uninstall
+# Usage:
+#   Local:  bash scripts/install_on_neo.sh
+#   Remote: curl -sSL https://raw.githubusercontent.com/ThingEdu/NeoArcade/main/scripts/install_on_neo.sh | bash
+#
+# Options:
+#   --uninstall        Remove NeoArcade installation
+#   --version=X.Y.Z    Install a specific release (default: latest)
 # ==============================================================================
 set -euo pipefail
 
-APP_ID="neoarcade"
-DISPLAY_NAME="NeoArcade"
-MODULE="neoarcade"
-GIT_REPO="https://github.com/ThingEdu/NeoArcade.git"
-BUNDLED_SRC="$HOME/Ai-Code/NeoArcade"          # source cài sẵn trên image NEO (nếu có)
+# -- Configuration ------------------------------------------------------------
+REPO="ThingEdu/NeoArcade"
+PKG="neoarcade"
+BIN="neoarcade"
+RAW_INSTALL_URL="https://raw.githubusercontent.com/${REPO}/main/scripts/install_on_neo.sh"
 
-APP_HOME="$HOME/Applications/$APP_ID"
-VENV="$APP_HOME/venv"
-BIN="$HOME/.local/bin/$APP_ID"
-DESKTOP="$HOME/.local/share/applications/$APP_ID.desktop"
-ICON_DIR="$HOME/.local/share/icons/hicolor/128x128/apps"
-ICON_FILE="$ICON_DIR/$APP_ID.png"
-
-VERSION=""
+# -- Parse arguments -----------------------------------------------------------
 UNINSTALL=false
-while [ $# -gt 0 ]; do
-    case "$1" in
-        --version=*)  VERSION="${1#*=}"; shift ;;
-        --version)    VERSION="${2:-}"; shift 2 ;;
-        --uninstall)  UNINSTALL=true; shift ;;
-        --no-desktop) shift ;;
-        *)            shift ;;                  # không hard-fail arg lạ (convention)
+INSTALL_VERSION=""
+
+for arg in "$@"; do
+    case "$arg" in
+        --uninstall)  UNINSTALL=true ;;
+        --version=*)  INSTALL_VERSION="${arg#*=}"; INSTALL_VERSION="${INSTALL_VERSION#v}" ;;
+        *)            echo "Unknown option: $arg"; exit 1 ;;
     esac
 done
 
-uninstall() {
-    rm -rf "$APP_HOME" "$BIN" "$DESKTOP" "$ICON_FILE"
-    update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
-    echo "$DISPLAY_NAME đã gỡ."
-    exit 0
+# -- Helpers -------------------------------------------------------------------
+info()  { echo -e "\033[1;32m[INFO]\033[0m  $*"; }
+warn()  { echo -e "\033[1;33m[WARN]\033[0m  $*"; }
+error() { echo -e "\033[1;31m[ERROR]\033[0m $*" >&2; }
+
+require_cmd() {
+    if ! command -v "$1" &>/dev/null; then
+        error "'$1' is required but not found. Please install it first."
+        exit 1
+    fi
 }
-[ "$UNINSTALL" = true ] && uninstall
 
-if [ -z "$VERSION" ]; then
-    echo "NEOPLAY_ERROR=missing_version" >&2
+SUDO="sudo"
+if [ "$(id -u)" -eq 0 ]; then
+    SUDO=""
+fi
+
+# -- Uninstall -----------------------------------------------------------------
+if [ "$UNINSTALL" = true ]; then
+    info "Uninstalling $PKG..."
+    if command -v apt-get &>/dev/null && dpkg -s "$PKG" &>/dev/null; then
+        $SUDO apt-get remove -y "$PKG"
+    fi
+    info "$PKG has been uninstalled."
+    exit 0
+fi
+
+# -- Pre-flight checks ---------------------------------------------------------
+info "Detected architecture: $(uname -m)"
+
+if ! command -v apt-get &>/dev/null; then
+    error "This installer requires an apt-based system (Armbian/Debian/Ubuntu)."
+    exit 1
+fi
+require_cmd curl
+
+# -- Step 1: Resolve version ----------------------------------------------------
+if [ -z "$INSTALL_VERSION" ]; then
+    info "Resolving latest release..."
+    INSTALL_VERSION="$(curl -sSL "https://api.github.com/repos/${REPO}/releases/latest" \
+        | grep -m1 '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/')"
+    if [ -z "$INSTALL_VERSION" ]; then
+        error "Could not determine the latest release. Check your network,"
+        error "or pin a version: bash install_on_neo.sh --version=X.Y.Z"
+        exit 1
+    fi
+fi
+info "Installing $PKG $INSTALL_VERSION"
+
+DEB_NAME="${PKG}_${INSTALL_VERSION}_all.deb"
+DEB_URL="https://github.com/${REPO}/releases/download/v${INSTALL_VERSION}/${DEB_NAME}"
+
+# -- Step 2: Download and install ------------------------------------------------
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+info "Downloading $DEB_URL"
+if ! curl -fSL --progress-bar -o "$TMP_DIR/$DEB_NAME" "$DEB_URL"; then
+    error "Download failed. Does release v${INSTALL_VERSION} exist and include ${DEB_NAME}?"
+    error "See: https://github.com/${REPO}/releases"
     exit 1
 fi
 
-# Python 3.11+ (đã có sẵn trên image NEO)
-if ! python3 -c 'import sys; raise SystemExit(0 if sys.version_info>=(3,11) else 1)'; then
-    echo "NEOPLAY_ERROR=missing_system_deps" >&2
+info "Installing via apt (pulls python3-pygame)..."
+$SUDO apt-get update -qq || true
+$SUDO apt-get install -y "$TMP_DIR/$DEB_NAME"
+
+# -- Step 3: Verify ------------------------------------------------------------
+if ! command -v "$BIN" &>/dev/null; then
+    error "Installation failed - '$BIN' not found on PATH."
     exit 1
 fi
+info "Verified: $(command -v "$BIN")"
 
-# Nguồn cài: ưu tiên bundled trên máy; nếu không có thì clone từ GitHub (repo public).
-WORK=""
-if [ -d "$BUNDLED_SRC/src/$MODULE" ]; then
-    SRC="$BUNDLED_SRC"
-    echo "Cài từ source bundled: $SRC"
-else
-    require_git() { command -v git >/dev/null || { echo "NEOPLAY_ERROR=missing_system_deps" >&2; exit 1; }; }
-    require_git
-    WORK="$(mktemp -d)"
-    git clone --depth 1 "$GIT_REPO" "$WORK/NeoArcade" >/dev/null 2>&1 \
-        || { echo "NEOPLAY_ERROR=clone_failed" >&2; exit 1; }
-    SRC="$WORK/NeoArcade"
-    echo "Cài từ GitHub: $GIT_REPO"
-fi
-
-# venv riêng cho app (convention #4). NeoArcade chỉ cần pygame-ce (có wheel aarch64).
-rm -rf "$APP_HOME"
-mkdir -p "$APP_HOME"
-python3 -m venv "$VENV"
-"$VENV/bin/pip" install --quiet --upgrade pip
-"$VENV/bin/pip" install --quiet "$SRC"          # kéo theo pygame-ce, tạo console-script 'neoarcade'
-
-if [ ! -x "$VENV/bin/$APP_ID" ]; then
-    echo "NEOPLAY_ERROR=install_failed" >&2
-    exit 1
-fi
-
-# launcher trong ~/.local/bin (convention exec = ["neoarcade"])
-mkdir -p "$(dirname "$BIN")"
-ln -sf "$VENV/bin/$APP_ID" "$BIN"
-
-# icon
-if [ -f "$SRC/src/$MODULE/assets/logo_de.png" ]; then
-    mkdir -p "$ICON_DIR"
-    cp "$SRC/src/$MODULE/assets/logo_de.png" "$ICON_FILE"
-    ICON_REF="$ICON_FILE"
-else
-    ICON_REF="applications-games"
-fi
-
-# .desktop (convention #6) — hiện trong menu desktop mục Education
-mkdir -p "$(dirname "$DESKTOP")"
-cat > "$DESKTOP" <<EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=$DISPLAY_NAME
-GenericName=Arcade Games
-Comment=Bộ game arcade vận động ThingBot trên NEO (Dế Foundation)
-Exec=$BIN
-Icon=$ICON_REF
-Terminal=false
-Categories=Education;
-Keywords=neo;game;arcade;maker;education;de;
-StartupNotify=true
-EOF
-update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
-
-# PATH có ~/.local/bin?
-case ":$PATH:" in
-    *":$HOME/.local/bin:"*) ;;
-    *) grep -q 'local/bin' "$HOME/.bashrc" 2>/dev/null || \
-       echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc" ;;
-esac
-
-[ -n "$WORK" ] && rm -rf "$WORK"
-
-# marker thành công (convention #5 — dòng cuối)
-echo "NEOPLAY_INSTALLED version=$VERSION"
+# -- Done ----------------------------------------------------------------------
+echo ""
+info "=========================================="
+info "  $PKG $INSTALL_VERSION installed successfully!"
+info "=========================================="
+echo ""
+echo "  Run:  $BIN"
+echo ""
+echo "  Uninstall:  curl -sSL $RAW_INSTALL_URL | bash -s -- --uninstall"
+echo ""

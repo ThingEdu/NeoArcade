@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=NeoArcade
+GenericName=Arcade Games
+Comment=One-button ThingBot arcade games for NEO One
+Exec=neoarcade
+Icon=neoarcade
+Terminal=false
+Categories=Game;Education;
+Keywords=arcade;game;thingbot;neo;education;maker;
+StartupNotify=true
