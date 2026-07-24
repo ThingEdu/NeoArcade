@@ -1,3 +1,10 @@
+neo-arcade (0.1.1) unstable; urgency=medium
+
+  * Rename source/binary package neoarcade -> neo-arcade and the launch
+    command + desktop entry to match the neo-* naming convention.
+
+ -- Maker Việt <everwellmax@gmail.com>  Fri, 24 Jul 2026 14:35:34 +0700
+
 neo-arcade (0.1.0) unstable; urgency=medium
 
   * Initial Debian packaging.
