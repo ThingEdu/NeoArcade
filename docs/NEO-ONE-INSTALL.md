@@ -1,9 +1,9 @@
-# Cài đặt NeoArcade trên NEO One
+# Cài đặt NEO Arcade trên NEO One
 
-Hướng dẫn cài & chạy **NeoArcade** trên thiết bị **NEO One** (ARM64 / Armbian).
+Hướng dẫn cài & chạy **NEO Arcade** trên thiết bị **NEO One** (ARM64 / Armbian).
 Đã kiểm chứng thực tế: NEO One, Armbian bookworm, aarch64, Python 3.11.2 — **54/54 test pass**.
 
-> NeoArcade rất nhẹ: chỉ phụ thuộc `pygame-ce` (có sẵn wheel ARM64), nên cài rất nhanh.
+> NEO Arcade rất nhẹ: chỉ phụ thuộc `pygame-ce` (có sẵn wheel ARM64), nên cài rất nhanh.
 > Game thị giác camera (Bắt Dế…) đã tách sang [NeoAiSport](https://github.com/ThingEdu/NeoAiSport) —
 > xem hướng dẫn cài riêng ở repo đó.
 
@@ -50,8 +50,8 @@ ssh-copy-id neo@<IP-NEO-One>
 
 ```bash
 mkdir -p ~/Ai-Code && cd ~/Ai-Code
-git clone https://github.com/ThingEdu/NeoArcade.git
-cd NeoArcade
+git clone https://github.com/ThingEdu/neo-arcade.git
+cd neo-arcade
 ```
 
 **Cách B — đẩy bản local từ máy dev bằng rsync** (không cần GitHub auth trên NEO):
@@ -60,7 +60,7 @@ cd NeoArcade
 # chạy trên MÁY DEV
 rsync -az --delete \
   --exclude '.venv/' --exclude '.pytest_cache/' --exclude '__pycache__/' \
-  ~/Ai-Code/NeoArcade/ neo@<IP-NEO-One>:~/Ai-Code/NeoArcade/
+  ~/Ai-Code/neo-arcade/ neo@<IP-NEO-One>:~/Ai-Code/neo-arcade/
 ```
 
 ---
@@ -68,7 +68,7 @@ rsync -az --delete \
 ## 4. Cài đặt
 
 ```bash
-cd ~/Ai-Code/NeoArcade
+cd ~/Ai-Code/neo-arcade
 python3 -m venv .venv
 .venv/bin/pip install --upgrade pip
 .venv/bin/pip install -e ".[dev]"      # hoặc: make install
@@ -87,7 +87,7 @@ python3 -m venv .venv
 ## 5. Kiểm tra cài đặt (không cần màn hình)
 
 ```bash
-cd ~/Ai-Code/NeoArcade
+cd ~/Ai-Code/neo-arcade
 SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy .venv/bin/python -m pytest -q
 # Kỳ vọng: 54 passed
 ```
@@ -100,8 +100,8 @@ Game hiển thị trên **màn hình gắn trực tiếp máy NEO** (display `:0
 Nếu chạy lệnh qua SSH, đặt `DISPLAY=:0`:
 
 ```bash
-cd ~/Ai-Code/NeoArcade
-DISPLAY=:0 .venv/bin/python -m neoarcade.hub        # màn tổng — chọn game
+cd ~/Ai-Code/neo-arcade
+DISPLAY=:0 .venv/bin/python -m neo_arcade.hub        # màn tổng — chọn game
 ```
 
 Hoặc dùng Makefile (chạy ngay trên máy NEO, có sẵn `$DISPLAY`):
@@ -121,22 +121,22 @@ make run-damboc   # Đấm Bốc
 
 ## 7. Launcher tiện lợi (tùy chọn)
 
-Tạo lệnh ngắn `neoarcade` để mở màn tổng:
+Tạo lệnh ngắn `neo-arcade` để mở màn tổng:
 
 ```bash
 mkdir -p ~/bin
-cat > ~/bin/neoarcade <<'SH'
+cat > ~/bin/neo-arcade <<'SH'
 #!/bin/bash
-cd ~/Ai-Code/NeoArcade
+cd ~/Ai-Code/neo-arcade
 export DISPLAY="${DISPLAY:-:0}"
-exec .venv/bin/python -m neoarcade.hub "$@"
+exec .venv/bin/python -m neo_arcade.hub "$@"
 SH
-chmod +x ~/bin/neoarcade
+chmod +x ~/bin/neo-arcade
 grep -q 'HOME/bin' ~/.bashrc || echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-Từ giờ chỉ cần gõ: `neoarcade`
+Từ giờ chỉ cần gõ: `neo-arcade`
 
 ---
 
@@ -154,7 +154,7 @@ Từ giờ chỉ cần gõ: `neoarcade`
 
 ## 9. Font tiếng Việt
 
-Văn bản trong game được vẽ bằng `pygame` (`src/neoarcade/ui/sprites.py` → `font()`).
+Văn bản trong game được vẽ bằng `pygame` (`src/neo_arcade/ui/sprites.py` → `font()`).
 Trước đây `font()` chỉ dò các font macOS (Arial Rounded, Avenir, Nunito…); trên NEO/Linux
 không có font nào khớp nên `pygame` rơi về **font mặc định `freesansbold`**, vốn **không có
 khối Unicode Latin Extended Additional (U+1EA0–U+1EF9)** — đúng các chữ Việt có dấu nặng/hỏi
@@ -167,18 +167,18 @@ theo thứ tự — ưu tiên font bo tròn trên macOS, rồi **Noto Sans / Dej
 - **NEO/Linux**: tự dùng **DejaVu Sans Bold** (`fonts-dejavu-core`, có sẵn trên Armbian).
 
 **Giữ brand bo tròn trên NEO (tùy chọn):** thả file `Nunito-Bold.ttf` (OFL, có hỗ trợ
-tiếng Việt) vào `src/neoarcade/assets/`. `font()` sẽ tự ưu tiên dùng font bundled này trên
+tiếng Việt) vào `src/neo_arcade/assets/`. `font()` sẽ tự ưu tiên dùng font bundled này trên
 mọi máy, không cần đổi code.
 
 Kiểm tra nhanh font có đủ chữ Việt không:
 
 ```bash
 .venv/bin/python -c "import pygame; pygame.init(); \
-from neoarcade.ui.sprites import font,_font_file; print('font:',_font_file()); \
+from neo_arcade.ui.sprites import font,_font_file; print('font:',_font_file()); \
 m=font(24).metrics('ạếổọấốứảầ'); print('thiếu glyph?', any(x is None for x in m))"
 # 'thiếu glyph? False' = OK
 ```
 
 ---
 
-_Tài liệu liên quan: [`README.md`](../README.md) · [`docs/FlappyDe-design.md`](FlappyDe-design.md) · [`docs/NeoArcade-Games-Roadmap.md`](NeoArcade-Games-Roadmap.md)_
+_Tài liệu liên quan: [`README.md`](../README.md) · [`docs/FlappyDe-design.md`](FlappyDe-design.md) · [`docs/NEO-Arcade-Games-Roadmap.md`](NEO-Arcade-Games-Roadmap.md)_

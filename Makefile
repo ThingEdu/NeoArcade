@@ -4,16 +4,16 @@ install:
 	python -m venv .venv && .venv/bin/pip install -e ".[dev]"
 
 run:            ## chạy với phần cứng ThingBot
-	.venv/bin/python -m neoarcade.app --profile thingbot
+	.venv/bin/python -m neo_arcade.app --profile thingbot
 
 hub:            ## Màn hình tổng — chọn game (launcher)
-	.venv/bin/python -m neoarcade.hub
+	.venv/bin/python -m neo_arcade.hub
 
 run-sim:        ## FlappyDe bằng bàn phím (không cần phần cứng)
-	.venv/bin/python -m neoarcade.app --profile keyboard
+	.venv/bin/python -m neo_arcade.app --profile keyboard
 
 run-dexe:       ## Đua Xe Dế bằng bàn phím (lái A/D, ←/→)
-	.venv/bin/python -m neoarcade.dexe.app --profile keyboard
+	.venv/bin/python -m neo_arcade.dexe.app --profile keyboard
 
 test:
 	.venv/bin/python -m pytest -q
@@ -22,7 +22,7 @@ lint:
 	.venv/bin/ruff check src tests
 
 run-bongro:     ## Bóng Rổ Dế (nút canh lực)
-	.venv/bin/python -m neoarcade.bongro.app --profile keyboard
+	.venv/bin/python -m neo_arcade.bongro.app --profile keyboard
 
 run-damboc:     ## Đấm Bốc (đập nút thử lực / đẩy)
-	.venv/bin/python -m neoarcade.damboc.app --profile keyboard
+	.venv/bin/python -m neo_arcade.damboc.app --profile keyboard

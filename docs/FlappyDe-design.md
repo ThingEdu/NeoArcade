@@ -1,6 +1,6 @@
 # FlappyDe — Tài liệu thiết kế
 
-> Game đầu tiên của bộ **NeoArcade** (ThingEdu). Cập nhật: 2026-06-13.
+> Game đầu tiên của bộ **NEO Arcade** (ThingEdu). Cập nhật: 2026-06-13.
 
 ## 1. Tổng quan
 
@@ -11,9 +11,9 @@ của **Dế Foundation (DE STEM)** — vỗ cánh bay, né khe giữa các "th�
 Mục tiêu (ưu tiên theo thứ tự):
 1. **Hút khách tại Làng Maker** — dễ hiểu trong 2 giây, đối kháng tạo đám đông.
 2. **Mở rộng dạy-làm** — sau này học sinh tự lắp nút/đế cảm ứng, tự vận động.
-3. **Sản phẩm catalog** — đóng gói phát hành trong app **NeoArcade**.
+3. **Sản phẩm catalog** — đóng gói phát hành trong app **NEO Arcade**.
 
-FlappyDe là **sản phẩm #1**; NeoArcade sẽ còn nhiều game khác được cập nhật dần.
+FlappyDe là **sản phẩm #1**; NEO Arcade sẽ còn nhiều game khác được cập nhật dần.
 
 ## 2. Bộ nhận diện — Dế Foundation (DE STEM)
 
@@ -54,7 +54,7 @@ Lấy từ repo `de-stem-foundation` (`docs/design-guidelines.md`).
 ### 3.3 🤫 Bí mật "Thế giới đêm" — _NỘI BỘ, KHÔNG đưa vào hướng dẫn người chơi_
 
 > Đây là **easter egg** để người chơi **tự khám phá** (là *tip*, không hướng dẫn). Tài liệu
-> này (repo NeoArcade private) ghi lại cho đội phát triển bảo trì; **không công bố cách kích
+> này (repo NEO Arcade private) ghi lại cho đội phát triển bảo trì; **không công bố cách kích
 > hoạt** trong README công khai / poster / video hướng dẫn.
 
 - **Kích hoạt**: bay **vượt lên trên đỉnh màn hình** (y < −bán kính Dế) → mở thế giới đêm 1 lần/ván.
@@ -112,17 +112,17 @@ squash-stretch + nghiêng theo vận tốc; âm thanh chip-tune; attract loop h�
 - Chạy `make run-sim` (bàn phím) để demo/QA không cần phần cứng. Acceptance: 1 vòng solo +
   1 vòng đấu về đích trên simulator; kịch bản rút tay cầm giữa chừng → phục hồi.
 
-## 8. NeoArcade — bộ sản phẩm
-NeoArcade là **app launcher + bộ game** arcade ThingBot trên NEO. FlappyDe là game #1.
+## 8. NEO Arcade — bộ sản phẩm
+NEO Arcade là **app launcher + bộ game** arcade ThingBot trên NEO. FlappyDe là game #1.
 Khung `engine/input/storage/attract` tái dùng để thêm game mới (gợi ý kế tiếp: Sút Luân Lưu,
-Nước Rút đập nút…). Mỗi game đóng gói vào catalog NeoArcade / NeoPlay.
+Nước Rút đập nút…). Mỗi game đóng gói vào catalog NEO Arcade / NeoPlay.
 
 ## 9. Lộ trình
 1. ✅ Prototype: con Dế brand, SOLO + ĐẤU 2 NGƯỜI, profile bàn phím.
-2. ✅ **Hoàn thiện**: tách `engine/input/ui/storage` (`src/neoarcade/`), **25 test** (engine/storage/input/controller),
+2. ✅ **Hoàn thiện**: tách `engine/input/ui/storage` (`src/neo_arcade/`), **25 test** (engine/storage/input/controller),
    leaderboard SQLite (TOP hôm nay ở menu), âm thanh chip-tune tổng hợp, mô hình **2 nút** khớp ThingBot.
 3. 🔜 Profile `thingbot` (neo-hw) chạy phần cứng thật + acceptance trên NEO One + 2 ThingBot.
 4. 🔜 Asset chính thức từ Figma brand kit (logo, mascot, shape).
 5. 🧪 Profile `jumppad` (nút cảm ứng — nhảy để bay) cho hướng vận động/dạy-làm.
-6. 🔜 Đưa FlappyDe vào catalog NeoArcade + thêm game #2.
+6. 🔜 Đưa FlappyDe vào catalog NEO Arcade + thêm game #2.
 ```

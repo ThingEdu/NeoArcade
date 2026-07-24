@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Build the neoarcade .deb inside a Debian bookworm container.
+# Build the neo-arcade .deb inside a Debian bookworm container.
 #
 # The package is Architecture: all (pure Python + pygame), so one build works
 # on both arm64 and amd64 — apt resolves python3-pygame per-architecture at
 # install time. Requires docker (or podman via alias).
 #
 # Usage:  bash scripts/build_deb.sh
-# Output: dist/neoarcade_<version>_all.deb
+# Output: dist/neo-arcade_<version>_all.deb
 # ==============================================================================
 set -euo pipefail
 
@@ -44,9 +44,9 @@ mkdir -p "$REPO_ROOT/dist"
 
         dpkg-buildpackage -us -uc -b
 
-        cp /neoarcade_*_all.deb /out/
-        chown "$(stat -c "%u:%g" /out)" /out/neoarcade_*_all.deb || true
+        cp /neo-arcade_*_all.deb /out/
+        chown "$(stat -c "%u:%g" /out)" /out/neo-arcade_*_all.deb || true
         echo ""
         echo "Built:"
-        ls -lh /out/neoarcade_*_all.deb
+        ls -lh /out/neo-arcade_*_all.deb
     '

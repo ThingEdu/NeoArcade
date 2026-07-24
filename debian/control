@@ -1,4 +1,4 @@
-Source: neoarcade
+Source: neo-arcade
 Section: games
 Priority: optional
 Maintainer: Maker Việt <everwellmax@gmail.com>
@@ -8,17 +8,17 @@ Build-Depends: debhelper-compat (= 13),
  python3-setuptools,
  pybuild-plugin-pyproject
 Standards-Version: 4.6.2
-Homepage: https://github.com/ThingEdu/NeoArcade
+Homepage: https://github.com/ThingEdu/neo-arcade
 Rules-Requires-Root: no
 
-Package: neoarcade
+Package: neo-arcade
 Architecture: all
 Depends: ${misc:Depends},
  ${python3:Depends},
  python3-pygame
 Recommends: python3-serial
 Description: One-button ThingBot arcade games for NEO One (ThingEdu)
- NeoArcade is a set of motion arcade games for the NEO One education
+ NEO Arcade is a set of motion arcade games for the NEO One education
  device (ARM64/Armbian) and standard Linux desktops, controlled by a
  single ThingBot arcade button over UART (with a keyboard fallback).
  .

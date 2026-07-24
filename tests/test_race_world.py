@@ -1,6 +1,6 @@
 """Test lõi đua xe (thuần)."""
-import neoarcade.config as C
-from neoarcade.dexe.world import RaceWorld
+import neo_arcade.config as C
+from neo_arcade.dexe.world import RaceWorld
 
 
 def w_solo(sched=None):

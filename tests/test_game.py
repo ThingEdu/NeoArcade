@@ -1,7 +1,7 @@
 """Test bộ điều khiển trạng thái (2 nút khớp ThingBot)."""
-import neoarcade.config as C
-from neoarcade.engine.game import Controller
-from neoarcade.storage.db import Leaderboard
+import neo_arcade.config as C
+from neo_arcade.engine.game import Controller
+from neo_arcade.storage.db import Leaderboard
 
 
 def _to_play(c):

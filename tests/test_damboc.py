@@ -1,7 +1,7 @@
 """Test lõi Đấm Bốc (thử lực / đẩy)."""
-import neoarcade.config as C
-from neoarcade.damboc.game import BoxController
-from neoarcade.storage.db import Leaderboard
+import neo_arcade.config as C
+from neo_arcade.damboc.game import BoxController
+from neo_arcade.storage.db import Leaderboard
 
 
 def _play(c):

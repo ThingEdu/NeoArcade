@@ -1,6 +1,6 @@
 """Test lõi mô phỏng World (thuần, không pygame)."""
-import neoarcade.config as C
-from neoarcade.engine.world import World
+import neo_arcade.config as C
+from neo_arcade.engine.world import World
 
 
 def w_solo(gaps=None):

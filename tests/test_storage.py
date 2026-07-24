@@ -1,5 +1,5 @@
 """Test leaderboard SQLite."""
-from neoarcade.storage.db import Leaderboard
+from neo_arcade.storage.db import Leaderboard
 
 
 def test_add_and_best():

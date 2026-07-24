@@ -1,7 +1,7 @@
 """Test bộ điều khiển + lịch sinh vật thể của Đua Xe Dế."""
-import neoarcade.config as C
-from neoarcade.dexe.game import RaceController, make_schedule
-from neoarcade.storage.db import Leaderboard
+import neo_arcade.config as C
+from neo_arcade.dexe.game import RaceController, make_schedule
+from neo_arcade.storage.db import Leaderboard
 
 
 def _to_play(c):

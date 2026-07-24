@@ -1,4 +1,4 @@
-neoarcade (0.1.0) unstable; urgency=medium
+neo-arcade (0.1.0) unstable; urgency=medium
 
   * Initial Debian packaging.
   * Architecture-independent package; pygame is pulled from apt

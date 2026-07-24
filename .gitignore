@@ -7,7 +7,7 @@ build/
 dist/
 
 # Dữ liệu runtime
-neoarcade.db
+neo_arcade.db
 
 # Brainstorm companion + ảnh render tạm
 .superpowers/

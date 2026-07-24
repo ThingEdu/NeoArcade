@@ -1,7 +1,7 @@
 """Test hồ sơ điều khiển (mapping nút). Dùng event giả để khỏi cần màn hình."""
 import pygame
 
-from neoarcade.input.profiles import KeyboardProfile, get_profile
+from neo_arcade.input.profiles import KeyboardProfile, get_profile
 
 
 class FakeEvent:

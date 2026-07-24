@@ -1,9 +1,9 @@
-# NeoArcade
+# NEO Arcade
 
 Bộ **game arcade "1 nút"** điều khiển bằng mạch **ThingBot ESP32**, chạy trên **NEO One** —
 dành cho **Làng Maker** (ThingEdu). Giao diện theo bộ nhận diện **Dế Foundation (DE STEM)**.
 
-NeoArcade là app launcher chứa nhiều game; mỗi game đóng gói riêng và được cập nhật dần.
+NEO Arcade là app launcher chứa nhiều game; mỗi game đóng gói riêng và được cập nhật dần.
 
 ## Sản phẩm
 
@@ -16,9 +16,9 @@ NeoArcade là app launcher chứa nhiều game; mỗi game đóng gói riêng v�
 | … | Nhảy Xa · Thăng Bằng · Nhịp · Nước Rút | phủ hết nhóm vận động | đa cảm biến | 💡 plan |
 
 > **Game camera (Bắt Dế, …) đã tách sang nền tảng riêng [NeoAiSport](https://github.com/ThingEdu/NeoAiSport)** —
-> game thị giác AI (tay/cử chỉ/mặt/tư thế) có stack riêng (opencv + mediapipe) để NeoArcade nhẹ, hợp NEO cấu hình thấp.
+> game thị giác AI (tay/cử chỉ/mặt/tư thế) có stack riêng (opencv + mediapipe) để NEO Arcade nhẹ, hợp NEO cấu hình thấp.
 
-→ Chi tiết & lộ trình: [`docs/NeoArcade-Games-Roadmap.md`](docs/NeoArcade-Games-Roadmap.md)
+→ Chi tiết & lộ trình: [`docs/NEO-Arcade-Games-Roadmap.md`](docs/NEO-Arcade-Games-Roadmap.md)
 
 Mỗi game = một loại vận động cho trẻ + một bài học **Blue Economy** (Dế Foundation, cùng vũ trụ với [DeBlue](https://deblue.vercel.app)).
 
@@ -41,7 +41,7 @@ make run-bongro  # Bóng Rổ Dế (canh lực)
 make run-damboc  # Đấm Bốc (đập nút)
 make test        # 53 test (engine/storage/input/controller × 4 game)
 ```
-Hoặc: `python -m neoarcade.hub` · `… .app` · `… .dexe.app`
+Hoặc: `python -m neo_arcade.hub` · `… .app` · `… .dexe.app`
 
 **2 nút (khớp ThingBot)** — Nút 1 = `SPACE`/`W`, Nút 2 = `ENTER`/`↑`, `ESC` thoát.
 Menu: Nút1 = Solo, Nút2 = Đấu · Trong trận: Nút1 = P1, Nút2 = P2 · Kết quả: Nút1 = chơi lại, Nút2 = menu.
@@ -49,7 +49,7 @@ Menu: Nút1 = Solo, Nút2 = Đấu · Trong trận: Nút1 = P1, Nút2 = P2 · K�
 ## Cấu trúc
 
 ```
-src/neoarcade/
+src/neo_arcade/
   config.py            # hằng số + palette (thuần)
   engine/              # FlappyDe LÕI THUẦN: world.py + game.py — test 100%
   dexe/                # Đua Xe Dế: world.py + game.py (thuần) + render.py + app.py
@@ -63,7 +63,7 @@ prototype/             # bản 1-file gốc (tham khảo)
 
 ## Tài liệu
 - [`docs/NEO-ONE-INSTALL.md`](docs/NEO-ONE-INSTALL.md) — **cài đặt & chạy trên NEO One** (ARM64/Armbian).
-- [`docs/NeoArcade-Games-Roadmap.md`](docs/NeoArcade-Games-Roadmap.md) — kế hoạch bộ game vận động, map input ThingBot, lồng Blue Economy.
+- [`docs/NEO-Arcade-Games-Roadmap.md`](docs/NEO-Arcade-Games-Roadmap.md) — kế hoạch bộ game vận động, map input ThingBot, lồng Blue Economy.
 - [`docs/FlappyDe-design.md`](docs/FlappyDe-design.md) — thiết kế chi tiết FlappyDe, brand, kiến trúc.
 
 ## Ngăn xếp

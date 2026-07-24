@@ -1,4 +1,4 @@
-"""FlappyDe — game đầu tiên trong bộ NeoArcade (ThingEdu).
+"""FlappyDe — game đầu tiên trong bộ NEO Arcade (ThingEdu).
 
 Điều khiển 1 nút: nhấn = con Dế vỗ cánh bay lên, né khe giữa các thân sậy.
 Giao diện theo bộ nhận diện Dế Foundation (DE STEM).
@@ -337,7 +337,7 @@ class FlappyDe:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((W, H))
-        pygame.display.set_caption("FlappyDe — NeoArcade · Dế Foundation")
+        pygame.display.set_caption("FlappyDe — NEO Arcade · Dế Foundation")
         self.clock = pygame.time.Clock()
         self.f_hero = font(76)
         self.f_big = font(46)
@@ -441,7 +441,7 @@ class FlappyDe:
         draw_cricket(s, W // 2 - 250, 158, BLUE_ELECTRIC, 1.0, 0.4, 8)
         draw_cricket(s, W // 2 + 250, 158, ORANGE_HOT, 1.0, 0.8, -8, band=GREEN_LIME)
         self._center_text(self.f_hero, "FlappyDe", W // 2, 148, BLUE_ELECTRIC)
-        self._center_text(self.f_sm, "NeoArcade", W // 2, 198, GREEN_CRICKET)
+        self._center_text(self.f_sm, "NEO Arcade", W // 2, 198, GREEN_CRICKET)
         # 2 thẻ chế độ
         self._mode_card(W // 2 - 180, 322, "SOLO", "Đua bảng điểm", "Nhấn  SPACE", BLUE_ELECTRIC)
         self._mode_card(W // 2 + 180, 322, "ĐẤU 2 NGƯỜI", "Đua tới đích", "Nhấn  ENTER", ORANGE_HOT)
@@ -540,7 +540,7 @@ class FlappyDe:
         else:
             pill = pygame.Rect(14, H - 36, 220, 26)
             self._round(pill, WHITE, BLUE_ELECTRIC, 2, 13)
-            self._text(self.f_sm, "FlappyDe · NeoArcade", pill.left + 14, pill.centery - 9, INK)
+            self._text(self.f_sm, "FlappyDe · NEO Arcade", pill.left + 14, pill.centery - 9, INK)
 
     # ---- input ----
     def on_key(self, key):

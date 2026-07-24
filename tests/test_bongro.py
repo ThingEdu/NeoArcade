@@ -1,9 +1,9 @@
 """Test lõi Bóng Rổ Dế (canh lực)."""
 import math
 
-import neoarcade.config as C
-from neoarcade.bongro.game import BasketController
-from neoarcade.storage.db import Leaderboard
+import neo_arcade.config as C
+from neo_arcade.bongro.game import BasketController
+from neo_arcade.storage.db import Leaderboard
 
 
 def _play(c):

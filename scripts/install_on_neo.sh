@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# NeoArcade Installer
-# Installs the NeoArcade .deb package from GitHub Releases.
+# NEO Arcade Installer
+# Installs the NEO Arcade .deb package from GitHub Releases.
 # Works on any apt-based system (Armbian/Debian/Ubuntu), arm64 and x86:
 # the package is Architecture: all — apt pulls python3-pygame for each
 # architecture.
 #
 # Usage:
 #   Local:  bash scripts/install_on_neo.sh
-#   Remote: curl -sSL https://raw.githubusercontent.com/ThingEdu/NeoArcade/main/scripts/install_on_neo.sh | bash
+#   Remote: curl -sSL https://raw.githubusercontent.com/ThingEdu/neo-arcade/main/scripts/install_on_neo.sh | bash
 #
 # Options:
-#   --uninstall        Remove NeoArcade installation
+#   --uninstall        Remove NEO Arcade installation
 #   --version=X.Y.Z    Install a specific release (default: latest)
 # ==============================================================================
 set -euo pipefail
 
 # -- Configuration ------------------------------------------------------------
-REPO="ThingEdu/NeoArcade"
-PKG="neoarcade"
-BIN="neoarcade"
+REPO="ThingEdu/neo-arcade"
+PKG="neo-arcade"
+BIN="neo-arcade"
 RAW_INSTALL_URL="https://raw.githubusercontent.com/${REPO}/main/scripts/install_on_neo.sh"
 
 # -- Parse arguments -----------------------------------------------------------
